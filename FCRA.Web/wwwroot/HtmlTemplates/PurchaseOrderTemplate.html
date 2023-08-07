@@ -1,0 +1,113 @@
+﻿<html>
+<head>
+    <meta charset='utf-8'>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <style type="text/css">
+        * {
+            font-family: 'Lato', sans-serif;
+            color: #2b2b2b;
+            line-height: 1.5;
+        }
+
+        .normalLineHeight {
+            line-height: normal !important;
+        }
+
+        .description {
+            white-space: normal;
+            max-width: 80%;
+        }
+
+        .nowrap {
+            white-space: nowrap !important;
+        }
+
+        table thead th, table td {
+            font-weight: 400;
+        }
+
+        table.tblQuotationItems {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            table.tblQuotationItems tr, table.tblClientDetails tr {
+                page-break-inside: avoid;
+            }
+
+        thead {
+            display: table-header-group;
+        }
+
+        table.tblQuotationItems > tfoot {
+            display: table-footer-group;
+        }
+
+        .tblQuotationItems td {
+            border-bottom: 1px dotted #eeeeee;
+        }
+
+            .tblQuotationItems td.tdPrice {
+                padding-left: 5px;
+                padding-right: 8px;
+            }
+
+        .tblQuotationItems thead th {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .tblItemSummary th, .tblItemSummary td {
+            line-height: 2 !important;
+        }
+
+        .categoryitemtd {
+            background: #f0f0f0;
+            color: #000;
+            font-weight: 400;
+            font-size: 6pt;
+            letter-spacing: 3px;
+        }
+
+        .rtgstd {
+            font-weight: 300;
+            font-size: 7pt;
+            line-height: normal !important;
+            padding: 0px;
+        }
+
+        .trproductitemheader {
+            font-weight: 400;
+            font-size: 9pt;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+
+        .headerspecer {
+            font-size: 3px;
+            line-height: normal !important;
+            padding: 0px;
+        }
+
+        .shadowText {
+            text-shadow: -2px 1px 7px rgba(0,0,0,1);
+        }
+
+        .text-danger {
+            color: #f83f37 !important;
+        }
+    </style>
+</head>
+<body>
+    {{TableRowContent}}
+    <!--Thankyou page-->
+    <div style="page-break-before:always">&nbsp;</div>
+    <table style="width: 100%; margin-top:400px;" border="0" cellspacing="0" cellpadding="2">
+        <thead>
+            <tr>
+                <th style="font-weight: 100; font-size: 49pt; color:#1f3870">Thank you</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>

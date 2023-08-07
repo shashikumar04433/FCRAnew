@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Customer Configuration";
+}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"]
+            </h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-1" id="divConfigurationContainer"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="@Url.Action("AdminCustomerConfiguration","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/CustomerConfiguration-index.js" asp-append-version="true"></script>
+}

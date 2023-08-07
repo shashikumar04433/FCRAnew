@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Comparison";
+}
+<div class="row">
+    @if (ViewBag.ApprovedVersion.Count > 0)
+    {
+        <div class="col-lg-4">
+            <label class="form-label">Previous Assessment</label>
+            <select class="form-select" id="ddlVersion1" name="version1">
+                @if (ViewBag.ApprovedVersion != null)
+                {
+                    foreach (var item in (List<CustomerVersionMasterViewModel>)ViewBag.ApprovedVersion)
+                    {
+                        <option value="@item.Id">Risk Assessment for @item.CreatedOn.ToString("dd/MMM/yyyy")</option>
+                    }
+                }
+            </select>
+        </div>
+    }
+    @if (ViewBag.ApprovedVersion.Count > 0)
+    {
+        <div class="col-lg-4">
+            <label class="form-label">Latest Assessment</label>
+            <select class="form-select" id="ddlVersion2" name="version2">
+                @if (ViewBag.ApprovedVersion != null)
+                {
+                    foreach (var item in (List<CustomerVersionMasterViewModel>)ViewBag.ApprovedVersion)
+                    {
+                        <option value="@item.Id">Risk Assessment for @item.CreatedOn.ToString("dd/MMM/yyyy")</option>
+                    }
+                }
+            </select>
+        </div>
+    }
+    <div class="col-lg-4 mt-3">
+        <button type="button" class="btn btn-primary ps-4 pe-4" id="btnRiskCompare"><i class="fas fa-search me-2"></i>Search</button>
+    </div>
+</div>
+<div class="card mt-2 riskComparePartial">
+    @*<partial name="_RiskComparisonPartial" model="@Model"></partial>*@
+</div>
+
+
+
+@section Scripts{
+    <script src="~/js/RiskCompare-Index.js" asp-append-version="true"></script>
+}
+@section extracss{
+    <style>
+        .clsDivider {
+            border: 2px solid #699da9 !important;
+            padding: 0px !important;
+            background-color: #699da9 !important;
+        }
+    </style>
+}

@@ -1,0 +1,249 @@
+﻿@model CustomerViewModel
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = (Model?.Id == 0 ? $"Add New {_masterType}" : $"{permissions.EditViewText} {_masterType}");
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"] Master
+            </h4>
+            <div class="col">
+                <a asp-area="Admin" asp-controller="@controller" asp-action="Index" class="text-decoration-none float-end"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="@controller" asp-action="Item" method="post" id="frmCustomer">
+            <input asp-for="Id" type="hidden" />
+            <section class="modern-horizontal-wizard customer-master">
+                <div class="bs-stepper modern-wizard-example">
+                    <div class="bs-stepper-header">
+                        <div class="step" data-target="#general">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-label text-center">
+                                    <span class="bs-stepper-title">General</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="step" data-target="#customerlocation">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-label text-center">
+                                    <span class="bs-stepper-title">Location</span>
+                                </span>
+                            </button>
+                        </div>
+                       @* <div class="step" data-target="#customercountry">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-label text-center">
+                                    <span class="bs-stepper-title">Countries</span>
+                                </span>
+                            </button>
+                        </div>*@
+                        <div class="step" data-target="#customerscale">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-label text-center">
+                                    <span class="bs-stepper-title">Scale Labels</span>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="step" data-target="#customerform">
+                            <button type="button" class="step-trigger">
+                                <span class="bs-stepper-label text-center">
+                                    <span class="bs-stepper-title">Form Labels</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bs-stepper-content">
+                        <div id="general" class="content">
+                            <div class="content-header">
+                                <h5 class="mb-0">General Information</h5>
+                                <small class="text-muted">Enter Your General Information.</small>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                    <label asp-for="Name"></label>
+                                    <input asp-for="Name" placeholder="Enter Name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <label asp-for="ScaleType"></label>
+                                    <select asp-for="ScaleType" asp-items="@Html.GetEnumSelectList<FCRA.Common.ScaleType>()" class="form-select"></select>
+                                    <span asp-validation-for="ScaleType" class="text-danger"></span>
+                                </div>
+                                @if (Model?.Id > 0)
+                                {
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                        <div class="form-check form-check-inline">
+                                            <input asp-for="IsActive" class="form-check-input">
+                                            <label asp-for="IsActive" class="form-check-label nomandatory"></label>
+                                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary btn-prev" disabled>
+                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                </button>
+                                @if (permissions.CanShowAddEditButton(Model!.Id))
+                                {
+                                    <button type="submit" class="btn btn-success btnSave">
+                                        <i class="align-middle mr-sm-25 mr-0 fas fa-save"></i>
+                                        <span class="align-middle d-sm-inline-block d-none">@(Model!.Id == 0 ? "Save" : "Update")</span>
+                                    </button>
+                                    @if (Model!.Id != 0)
+                                    {
+                                        <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail">Audit Trail</button>
+                                    }
+                                }
+                                <button type="button" class="btn btn-primary btn-next">
+                                    <span class="align-middle d-sm-inline-block d-none">Next</span>
+                                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="customerlocation" class="content">
+                            <div class="content-header">
+                                <h5 class="mb-0">Location Detail</h5>
+                                <small>Enter Your Location Detail.</small>
+                                <button class="btn btn-icon btn-outline-info btnAddLocation" type="button" data-toggle="tooltip" title="Add New Location"><i class="fas fa-plus text-info"></i></button>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12 location-container">
+                                    <!-- Space for Contact details-->
+                                    <partial name="_LocationDetailsPartial" model="@Model" />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-prev">
+                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-next">
+                                    <span class="align-middle d-sm-inline-block d-none">Next</span>
+                                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                </button>
+                            </div>
+                        </div>
+                       @* <div id="customercountry" class="content">
+                            <div class="content-header">
+                                <h5 class="mb-0">Country List</h5>
+                                <small>Select Countries for the customer</small>
+                                <button class="btn btn-icon btn-outline-primary btnAddCountry" type="button" data-toggle="tooltip" title="Add New Country"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12 country-container">
+                                    <!-- Space for Contact details-->
+                                    <partial name="_CountryDetailsPartial" model="@Model" />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-prev">
+                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-next">
+                                    <span class="align-middle d-sm-inline-block d-none">Next</span>
+                                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                </button>
+                            </div>
+                        </div>*@
+                        <div id="customerscale" class="content">
+                            <div class="content-header">
+                                <h5 class="mb-0">Scale Labels</h5>
+                                <small>Enter Your Custom Scale Labels.</small>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12 scale-container">
+                                    <!-- Space for Contact details-->
+                                    <partial name="_ScaleDetailsPartial" model="@Model" />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-prev">
+                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-next">
+                                    <span class="align-middle d-sm-inline-block d-none">Next</span>
+                                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="customerform" class="content">
+                            <div class="content-header">
+                                <h5 class="mb-0">Form Labels</h5>
+                                <small class="text-muted">Enter Your Custom Form Labels.</small>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-12 form-container">
+                                    <!-- Space for Contact details-->
+                                    <partial name="_FormDetailsPartial" model="@Model" />
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary btn-prev">
+                                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                                </button>
+                                @if (permissions.CanShowAddEditButton(Model!.Id))
+                                {
+                                    <button type="submit" class="btn btn-success btnSave">
+                                        <i class="align-middle mr-sm-25 mr-0 fas fa-save"></i>
+                                        <span class="align-middle d-sm-inline-block d-none">@(Model!.Id == 0 ? "Save" : "Update")</span>
+                                    </button>
+                                    @if (Model!.Id != 0)
+                                    {
+                                        <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail1">Audit Trail</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Field Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<input hidden="hidden" id="hdTitle" value="@Model.GetType().Name" />
+<input hidden="hidden" id="hdId" value="@Model!.Id" />
+@section scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="@Url.Action("AdminCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/customer-item.js" asp-append-version="true"></script>
+}

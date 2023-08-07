@@ -1,0 +1,117 @@
+﻿@using FCRA.Common;
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"]
+            </h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <input type="hidden" id="IsExcludedInRisk" value="false" />
+        <input type="hidden" id="RiskRangeParameter" value="@((int)RiskRangeParameter.NumberRange)" />
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Stage</label>
+                <select id="StageId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.StageId != null)
+                    {
+                        foreach (var item in (IEnumerable<StageViewModel>)ViewBag.StageId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Risk Type</label>
+                <select id="RiskTypeId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Geographic Presence</label>
+                <select id="GeographicPresenceId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Business Segment</label>
+                <select id="CustomerSegmentId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Sub Unit</label>
+                <select id="BusinessSegmentId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Risk Factor</label>
+                <select id="RiskFactorId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Risk Sub Factor</label>
+                <select id="RiskSubFactorId" aria-required="true" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <button type="button" id="btnSearchMapping" class="btn btn-primary rounded-10 font-weight-600 waves-effect waves-float waves-light" data-toggle="tooltip" title="Search Permission"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="col-12 mt-1" id="divMappingContainer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divAddQuestionModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblSelectedQuestions">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Purpose of the question</th>
+                            <th>
+                                <button type="button" class="btn btn-outline-success rounded-5 min-w-0 btnShowQuestionListModal" title="Show Questions to add">
+                                    <i class="fas fa-plus-circle text-success"></i>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddQuestion" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divAddQuestionListModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblQuestionList">
+                    <thead>
+                        <tr><th>#</th><th>Question</th><th>Purpose of the question</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddQuestionFromList" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="@Url.Action("AdminCommonCategory","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("AdminProductRiskCriteriaMapping","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/admin/masters/CommonCategory.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/ProductRiskCriteriaMapping-Index.js" asp-append-version="true"></script>
+}

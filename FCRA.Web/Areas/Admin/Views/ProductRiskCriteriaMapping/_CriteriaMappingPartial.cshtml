@@ -1,0 +1,53 @@
+﻿@model List<RiskFactorProductServiceMappingViewModel>
+@{
+    var iIndex = 0;
+    var formPermissions = ViewContext.HttpContext.GetFormPermissions();
+    var criterias = new List<FCRA.ViewModels.Masters.RiskCriteriaViewModel>();
+    if (ViewBag.RiskCriterias != null)
+    {
+        criterias = ViewBag.RiskCriterias as List<FCRA.ViewModels.Masters.RiskCriteriaViewModel>;
+    }
+}
+<table class="table" id="tblRolePermissions">
+    <thead>
+        <tr>
+            <th rowspan="2" style="text-align:center;width:105px;">Sl. No.</th>
+            <th rowspan="2">Services</th>
+            <th colspan="@criterias!.Count" style="text-align:center;">Risk Criterias</th>
+        </tr>
+        <tr>
+            @foreach (var criteria in criterias)
+            {
+                <td>@criteria.Name</td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var mappings = item.RiskCriteriaMappings.Where(t => t.RiskFactorId == item.RiskFactorId && t.RiskSubFactorId == item.RiskSubFactorId && t.ProductId == item.ProductId).ToList();
+            iIndex += 1;
+            <tr>
+                <td style="text-align:right;">@iIndex</td>
+                <td>@item.ProductService?.Name</td>
+                @foreach (var mapping in mappings)
+                {
+                    <td class="nowrap text-center">
+                        <input asp-for="@mapping.IsSelected" datatype="View" class="form-check-input chkSelect" data-factorid="@mapping.RiskFactorId" data-subfactorid="@mapping.RiskSubFactorId" data-productid="@mapping.ProductId" data-criteriaid="@mapping.RiskCriteriaId" />
+                        <button type="button" title="Questionnaire" class="btn btn-outline-info rounded-5 min-w-0 ml-1 btnQuestion @(mapping.IsSelected?"":"v-none")" data-productid="@mapping.ProductId" data-criteriaid="@mapping.RiskCriteriaId" data-questions="@mapping.QuestionIds"><i class="fas fa-question-circle text-info"></i></button>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+    @if (Model != null && Model.Any() && formPermissions.Edit)
+    {
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:center">
+                    <button type="button" id="btnUpdateMapping" class="btn btn-primary rounded-10 font-weight-600 px-4 mt-1 waves-effect waves-float waves-light">Update</button>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>

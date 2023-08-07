@@ -1,0 +1,61 @@
+﻿<div class="card">
+       <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"]
+            </h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <input type="hidden" id="ScaleType" value="@((int)ViewBag.ScaleType)" />
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Stage</label>
+                <select id="StageId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.StageId != null)
+                    {
+                        foreach (var item in (IEnumerable<StageViewModel>)ViewBag.StageId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Risk Type</label>
+                <select id="RiskTypeId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Geographic Presence</label>
+                <select id="GeographicPresenceId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Business Segment</label>
+                <select id="CustomerSegmentId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 d-none">
+                <label class="form-label">Sub Unit</label>
+                <select id="BusinessSegmentId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Risk Factor</label>
+                <select id="RiskFactorId" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <label class="form-label">Risk Sub Factor</label>
+                <select id="RiskSubFactorId" aria-required="true" class="form-select"></select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <button type="button" id="btnSearchMapping" class="btn btn-primary rounded-10 font-weight-600 waves-effect waves-float waves-light" data-toggle="tooltip" title="Search Permission"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="col-12 mt-1" id="divMappingContainer"></div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="@Url.Action("AdminCommonCategory","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("AdminProductServiceMapping","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/admin/masters/CommonCategory.js" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/ProductServiceMapping-Index.js" asp-append-version="true"></script>
+}

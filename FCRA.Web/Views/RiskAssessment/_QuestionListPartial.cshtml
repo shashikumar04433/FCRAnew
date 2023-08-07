@@ -1,0 +1,49 @@
+﻿@using FCRA.Common;
+@model List<QuestionsRiskCriteriaMappingViewModel>
+@{
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Questions?.Name</td>
+            <td>@item.Questions?.Description</td>
+            <td class="text-center" style="min-width:150px;">
+                <select asp-for="@item.SelectedRating" class="form-select form-select-sm ddlQuestionRating" data-qid="@item.QuestionId">
+                    <option value="0">--Select--</option>
+                    @if (scaleType == ScaleType.ThreePoint)
+                    {
+                        <option value="1" data-rating="1">Low</option>
+                        <option value="2" data-rating="2">Medium</option>
+                        <option value="3" data-rating="3">High</option>
+                    }
+                    else if (scaleType == ScaleType.FourPoint)
+                    {
+                        <option value="1" data-rating="1">Low</option>
+                        <option value="2" data-rating="2">Medium</option>
+                        <option value="3" data-rating="3">High</option>
+                        <option value="4" data-rating="4">Critical</option>
+                    }
+                    else if (scaleType == ScaleType.FivePoint)
+                    {
+                        <option value="1" data-rating="1">Low</option>
+                        <option value="2" data-rating="2">Medium</option>
+                        <option value="3" data-rating="3">Medium-High</option>
+                        <option value="4" data-rating="4">High</option>
+                        <option value="5" data-rating="5">Critical</option>
+                    }
+                </select>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="3">No question found!</td>
+    </tr>
+}

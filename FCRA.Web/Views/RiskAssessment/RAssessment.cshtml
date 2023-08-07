@@ -1,0 +1,258 @@
+﻿@using FCRA;
+@using FCRA.Common;
+@model FCRA.ViewModels.AssessmentViewModel
+@{
+    ViewData["Title"] = "Assessment Parameter";
+    int iIndex = 0;
+    int iRowIndex = 0;
+}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col-11">
+                @ViewData["Title"]&nbsp;>>&nbsp;@Model?.RiskType?.Name&nbsp;>>&nbsp;@Model?.RiskFactors.FirstOrDefault()?.Name
+            </h4>
+            <div class="col-1">
+                <a asp-area="" asp-controller="RiskAssessment" asp-action="Index" class="text-decoration-none float-end"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <input value="@Model?.RiskFactors.FirstOrDefault()?.Id.Encrypt()" type="hidden" id="hdRiskFactorId" />
+        <input type="hidden" id="hdTypeId" value="@Model?.RiskType.Id.Encrypt()" />
+        <div class="row">
+            <div class="col-12">
+                <a asp-area="" asp-controller="RiskAssessment" asp-action="D" asp-route-t="@Model?.RiskType?.Id.Encrypt()" asp-route-f="@Model?.RiskFactors.FirstOrDefault()?.Id.Encrypt()" target="_blank" class="text-decoration-none float-end" title="Download Template"><i class="fas fa-file-excel"></i> Download Template</a>
+            </div>
+        </div>
+        @foreach (var factor in Model.RiskFactors)
+        {
+            var criteria = FCRA.ViewModels.AssessmentViewModel.GetAssesmentModel(Model, factor.Id);
+            iRowIndex = 1;
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sl. No.</th>
+                        <th>Sub Factor</th>
+                        <th>Description</th>
+                        <th>Low</th>
+                        <th>Medium</th>
+                        <th>High</th>
+                        <th>Risk Weightage</th>
+                        <th>Response</th>
+                        <th>Risk Score</th>
+                        <th>Weighted Score</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subFactor in Model.RiskSubFactors.Where(t => t.RiskFactorId == factor.Id))
+                    {
+                        var subFactorCriterias = FCRA.ViewModels.AssessmentViewModel.GetAssesmentModel(Model, factor.Id, subFactor.Id);
+
+                        <tr class="@(subFactorCriterias.RiskCriteriaMappings.Any()?"trDisabled":"")" style="vertical-align:middle" data-factorid="@factor.Id" data-subfactorid="@subFactor.Id" data-riskrangeparameter="@subFactor.RiskRangeParameter">
+                            <td align="right">@iRowIndex</td>
+                            <td>@subFactor.Name</td>
+                            <td>@subFactor.Description</td>
+                            @if (subFactor.IsExcludedInRisk)
+                            {
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                                <td align="center">NA</td>
+                            }
+                            else
+                            {
+                                @if (subFactor.RiskRangeParameter == RiskRangeParameter.PercentRange)
+                                {
+                                    <td>@subFactor.Percentage2%</td>
+                                    <td class="nowrap">@subFactor.Percentage3% - @subFactor.Percentage4%</td>
+                                    <td>@subFactor.Percentage5%</td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.PreDefinedParameters)
+                                {
+                                    <td>@subFactor.PreDefinedRiskParameter1?.Name</td>
+                                    <td>@subFactor.PreDefinedRiskParameter2?.Name</td>
+                                    <td>@subFactor.PreDefinedRiskParameter3?.Name</td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.Descriptive)
+                                {
+                                    <td>@subFactor.RiskDescription1</td>
+                                    <td>@subFactor.RiskDescription2</td>
+                                    <td>@subFactor.RiskDescription3</td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.Volume)
+                                {
+                                    <td colspan="3">-</td>
+                                }
+                                <td>@subFactor.RiskWeightage%</td>
+                                @if (subFactor.RiskRangeParameter == RiskRangeParameter.PercentRange)
+                                {
+                                    <td>
+                                        <input asp-for="@subFactor.Response" class="form-control riskWeightage" type="number" placeholder="Response" data-low="@subFactor.Percentage2"
+                               data-mediummin="@subFactor.Percentage3" data-mediummax="@subFactor.Percentage4"
+                               data-high="@subFactor.Percentage5" max="100" min="0" />
+                                    </td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.PreDefinedParameters)
+                                {
+                                    <td>
+                                        <select asp-for="@subFactor.PreDefinedParameterId" class="form-select riskWeightageSelect riskWeightageSelectPre">
+                                            <option value="" data-rating="0">--Select--</option>
+                                            <option value="@subFactor.PreDefinedParameter1Id" data-rating="1">@subFactor.PreDefinedRiskParameter1?.Name</option>
+                                            <option value="@subFactor.PreDefinedParameter2Id" data-rating="2">@subFactor.PreDefinedRiskParameter2?.Name</option>
+                                            <option value="@subFactor.PreDefinedParameter3Id" data-rating="3">@subFactor.PreDefinedRiskParameter3?.Name</option>
+                                        </select>
+                                    </td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.Descriptive)
+                                {
+                                    <td>
+                                        <select asp-for="@subFactor.ResponseDescription" class="form-select riskWeightageSelect riskWeightageSelectDescription">
+                                            <option value="" data-rating="0">--Select--</option>
+                                            <option value="@subFactor.RiskDescription1" data-rating="1">@subFactor.RiskDescription1</option>
+                                            <option value="@subFactor.RiskDescription2" data-rating="2">@subFactor.RiskDescription2</option>
+                                            <option value="@subFactor.RiskDescription3" data-rating="3">@subFactor.RiskDescription3</option>
+                                        </select>
+                                    </td>
+                                }
+                                else if (subFactor.RiskRangeParameter == RiskRangeParameter.Volume)
+                                {
+                                    <td>
+                                        <input asp-for="@subFactor.Response" class="form-control riskWeightage" type="number" placeholder="Response" data-low="@subFactor.RiskVolume1"
+                               data-mediummin="@subFactor.RiskVolume2" data-mediummax="@subFactor.RiskVolume2"
+                               data-high="@subFactor.RiskVolume3" max="100" min="0" readonly="readonly" />
+                                    </td>
+                                }
+
+                                @if (subFactor.Score.HasValue)
+                                {
+                                    <td class="riskScore" align="center" valign="middle">@subFactor.Score.Value</td>
+                                }
+                                else
+                                {
+                                    <td class="riskScore" align="center" valign="middle">-</td>
+                                }
+                                <td class="riskWeightedScore" data-weightedpercent="@subFactor.RiskWeightage">@(subFactor.Score.HasValue ? (subFactor.RiskWeightage * subFactor.Score.Value).ToTwoDecimal() : "")</td>
+                                <td>
+                                    <textarea asp-for="@subFactor.Assumptions" cols="50" rows="2" class="form-control txtAssumptions" placeholder="Comments"></textarea>
+                                </td>
+                            }
+                        </tr>
+                        @if (subFactorCriterias.RiskCriteriaMappings.Any())
+                        {
+                            <tr>
+                                <td colspan="11">
+                                    <partial name="_RiskCriteriaPartial.cshtml" model="subFactorCriterias" />
+                                </td>
+                            </tr>
+                        }
+                        @if (subFactor.RiskRangeParameter == RiskRangeParameter.Volume)
+                        {
+                            var volume = Model.VolumeMappings.Where(t => t.RiskFactorId == subFactor.RiskFactorId && t.RiskSubFactorId == subFactor.Id).FirstOrDefault();
+                            if (volume != null)
+                            {
+                                <tr>
+                                    <td colspan="11">
+                                        <partial name="_VolumePartial.cshtml" model="volume" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        iRowIndex += 1;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="text-end" colspan="9">Total Weighted Score</th>
+                        <th class="text-end factorTotalWeightedScore" data-factorid="@factor.Id" data-totalweightedscore="@factor.TotalWeightedScore">@factor.TotalWeightedScore.ToTwoDecimal()</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+            iIndex += 1;
+        }
+    </div>
+    <div class="card-footer text-end">
+        <button type="button" class="btn btn-primary ps-4 pe-4" id="btnSaveResponse"><i class="fas fa-save me-2"></i> Submit</button>
+    </div>
+</div>
+<div class="modal fade" id="divAddQuestionModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblSelectedQuestions">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Purpose of the question</th>
+                            <th>Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddQuestion" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divCountriesVolumeModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Country</th>
+                            <th>Risk Rating</th>
+                            <th style="width:150px;">Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCountriesVolumeModal" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="@Url.Action("RiskAssessmentAssessment","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/RiskAssessment-Assessment.js" asp-append-version="true"></script>
+    <style>
+        .ratingScore {
+            display: inline-block;
+            padding-right: 20px;
+        }
+
+        .btnQuestion {
+            position: absolute;
+            right: 5px;
+        }
+
+        .tblRatingScore th.min-w-135 {
+            min-width: 135px;
+        }
+    </style>
+}

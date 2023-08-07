@@ -1,0 +1,310 @@
+﻿@using FCRA.Common;
+@model RiskSubFactorViewModel
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = (Model?.Id == 0 ? $"Add New {_masterType}" : $"{permissions.EditViewText} {_masterType}");
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"]
+            </h4>
+            <div class="col">
+                <a asp-area="Admin" asp-controller="@controller" asp-action="Index" class="text-decoration-none float-end"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="@controller" asp-action="Item" method="post">
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ScaleType" type="hidden" value="@((int)Model!.ScaleType)" />
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="StageId"></label>
+                    <select asp-for="StageId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.StageId != null)
+                        {
+                            foreach (var item in (List<StageViewModel>)ViewBag.StageId)
+                            {
+                                <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="StageId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 @(Model!.RiskTypeId.HasValue?"":"d-none")">
+                    <label asp-for="RiskTypeId"></label>
+                    <select asp-for="RiskTypeId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.RiskTypeId != null)
+                        {
+                            foreach (var item in (List<RiskTypeViewModel>)ViewBag.RiskTypeId)
+                            {
+                                <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="RiskTypeId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 @(Model!.GeographicPresenceId.HasValue?"":"d-none")">
+                    <label asp-for="GeographicPresenceId"></label>
+                    <select asp-for="GeographicPresenceId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.GeographicPresenceId != null)
+                        {
+                            foreach (var item in (List<GeographicPresenceViewModel>)ViewBag.GeographicPresenceId)
+                            {
+                                <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.CountryName</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="GeographicPresenceId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 @(Model!.CustomerSegmentId.HasValue?"":"d-none")">
+                    <label asp-for="CustomerSegmentId"></label>
+                    <select asp-for="CustomerSegmentId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.CustomerSegmentId != null)
+                        {
+                            foreach (var item in (List<CustomerSegmentViewModel>)ViewBag.CustomerSegmentId)
+                            {
+                                <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="CustomerSegmentId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 @(Model!.BusinessSegmentId.HasValue?"":"d-none")">
+                    <label asp-for="BusinessSegmentId"></label>
+                    <select asp-for="BusinessSegmentId" asp-items="@ViewBag.BusinessSegmentId" class="form-select"></select>
+                    <span asp-validation-for="BusinessSegmentId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="RiskFactorId"></label>
+                    <select asp-for="RiskFactorId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.RiskFactorId != null)
+                        {
+                            foreach (var item in (List<RiskFactorViewModel>)ViewBag.RiskFactorId)
+                            {
+                                <option value="@item.Id" data-ex="@item.IsExcludedInRisk" data-param="@((int)item.RiskRangeParameter)">@item.Name</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="RiskFactorId" class="text-danger"></span>
+                </div>                
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" placeholder="Enter Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" placeholder="Enter Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="IsExcludedInRisk" />
+                <input type="hidden" asp-for="RiskRangeParameter" value="@((int)Model.RiskRangeParameter)" />
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PercentRange) d-none">
+                    <label asp-for="Percentage2"></label>
+                    <input asp-for="Percentage2" placeholder="Enter Low Risk % (<=)" />
+                    <span asp-validation-for="Percentage2" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PercentRange) d-none">
+                    <label asp-for="Percentage3"></label>
+                    <input asp-for="Percentage3" placeholder="Enter Medium Risk % - Min" />
+                    <span asp-validation-for="Percentage3" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PercentRange) scaleType scaleType4 d-none">
+                    <label asp-for="Percentage4"></label>
+                    <input asp-for="Percentage4" placeholder="Enter Medium Risk % - Max" />
+                    <span asp-validation-for="Percentage4" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PercentRange) scaleType scaleType4 scaleType5 d-none">
+                    <label asp-for="Percentage5"></label>
+                    <input asp-for="Percentage5" placeholder="Enter High Risk % (>=)" />
+                    <span asp-validation-for="Percentage5" class="text-danger"></span>
+                </div>
+                @if(ViewBag.scaletype > 0)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PreDefinedParameters) d-none">
+                        <label asp-for="PreDefinedParameter1Id"></label>
+                        <select asp-for="PreDefinedParameter1Id" asp-items="ViewBag.PreDefinedParameter1Id" aria-required="true" class=" form-select active"></select>
+                        <span asp-validation-for="PreDefinedParameter1Id" class="text-danger"></span>
+                    </div>
+                }
+                @if (ViewBag.scaletype > 1)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PreDefinedParameters) d-none">
+                        <label asp-for="PreDefinedParameter2Id"></label>
+                        <select asp-for="PreDefinedParameter2Id" asp-items="ViewBag.PreDefinedParameter2Id" aria-required="true" class=" form-select active"></select>
+                        <span asp-validation-for="PreDefinedParameter2Id" class="text-danger"></span>
+                    </div>
+                }
+                @if (ViewBag.scaletype > 2)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PreDefinedParameters) d-none">
+                        <label asp-for="PreDefinedParameter3Id"></label>
+                        <select asp-for="PreDefinedParameter3Id" asp-items="ViewBag.PreDefinedParameter3Id" aria-required="true" class=" form-select active"></select>
+                        <span asp-validation-for="PreDefinedParameter3Id" class="text-danger"></span>
+                    </div>
+                }
+                @if (ViewBag.scaletype > 3)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PreDefinedParameters) scaleType scaleType4 d-none">
+                        <label asp-for="PreDefinedParameter4Id"></label>
+                        <select asp-for="PreDefinedParameter4Id" asp-items="ViewBag.PreDefinedParameter4Id" aria-required="true" class=" form-select active"></select>
+                        <span asp-validation-for="PreDefinedParameter4Id" class="text-danger"></span>
+                    </div>
+                }
+                @if (ViewBag.scaletype > 4)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.PreDefinedParameters) scaleType scaleType4 scaleType5 d-none">
+                        <label asp-for="PreDefinedParameter5Id"></label>
+                        <select asp-for="PreDefinedParameter5Id" asp-items="ViewBag.PreDefinedParameter5Id" aria-required="true" class=" form-select active"></select>
+                        <span asp-validation-for="PreDefinedParameter5Id" class="text-danger"></span>
+                    </div>
+                }
+
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Descriptive) d-none">
+                    <label asp-for="RiskDescription1"></label>
+                    <input asp-for="RiskDescription1" placeholder="Enter Low Risk" />
+                    <span asp-validation-for="RiskDescription1" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Descriptive) d-none">
+                    <label asp-for="RiskDescription2"></label>
+                    <input asp-for="RiskDescription2" placeholder="Enter Medium Risk" />
+                    <span asp-validation-for="RiskDescription2" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Descriptive) d-none">
+                    <label asp-for="RiskDescription3"></label>
+                    <input asp-for="RiskDescription3" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskDescription3" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Descriptive) scaleType scaleType4 d-none">
+                    <label asp-for="RiskDescription4"></label>
+                    <input asp-for="RiskDescription4" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskDescription4" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Descriptive) scaleType scaleType4 scaleType5 d-none">
+                    <label asp-for="RiskDescription5"></label>
+                    <input asp-for="RiskDescription5" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskDescription5" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Volume) d-none">
+                    <label asp-for="RiskVolume1"></label>
+                    <input asp-for="RiskVolume1" placeholder="Enter Low Risk" />
+                    <span asp-validation-for="RiskVolume1" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Volume) d-none">
+                    <label asp-for="RiskVolume2"></label>
+                    <input asp-for="RiskVolume2" placeholder="Enter Medium Risk" />
+                    <span asp-validation-for="RiskVolume2" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Volume) d-none">
+                    <label asp-for="RiskVolume3"></label>
+                    <input asp-for="RiskVolume3" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskVolume3" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Volume) scaleType scaleType4 d-none">
+                    <label asp-for="RiskVolume4"></label>
+                    <input asp-for="RiskVolume4" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskVolume4" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskType riskType@((int)RiskRangeParameter.Volume) scaleType scaleType4 scaleType5 d-none">
+                    <label asp-for="RiskVolume5"></label>
+                    <input asp-for="RiskVolume5" placeholder="Enter High Risk" />
+                    <span asp-validation-for="RiskVolume5" class="text-danger"></span>
+                </div>
+
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3 riskTypeParameter d-none">
+                    <label asp-for="RiskWeightage"></label>
+                    <input asp-for="RiskWeightage" placeholder="Enter Risk Weightage" />
+                    <span asp-validation-for="RiskWeightage" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="Sequence"></label>
+                    <input asp-for="Sequence" placeholder="Enter Display Order" />
+                    <span asp-validation-for="Sequence" class="text-danger"></span>
+                </div>
+                @if (Model?.Id > 0)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input asp-for="IsActive" class="form-check-input">
+                            <label asp-for="IsActive" class="form-check-label nomandatory"></label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input asp-for="isAttachmentApplicable" class="form-check-input">
+                            <label asp-for="isAttachmentApplicable" class="form-check-label nomandatory"></label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3" id="divMandatoryAttachment">
+                        <div class="form-check form-check-inline">
+                            <input asp-for="isAttachmentMandatory" class="form-check-input">
+                            <label asp-for="isAttachmentMandatory" class="form-check-label nomandatory"></label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                @if (permissions.CanShowAddEditButton(Model!.Id))
+                {
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary ps-4 pe-4"><i class="fas fa-save me-2"></i> @(Model!.Id == 0 ? "Save" : "Update")</button>
+                        @if (Model!.Id != 0)
+                        {
+                            <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail">Audit Trail</button>
+                        }
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Field Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<input hidden="hidden" id="hdTitle" value="@Model.GetType().Name" />
+<input hidden="hidden" id="hdId" value="@Model!.Id" />
+@section scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="@Url.Action("AdminRiskSubFactor","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/RiskSubFactor-Item.js" asp-append-version="true"></script>
+}

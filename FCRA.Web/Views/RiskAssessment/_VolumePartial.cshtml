@@ -1,0 +1,123 @@
+﻿@using FCRA.Common;
+@model RiskSubFactorVolumeResponseViewModel
+@{
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+<div class="card">
+    <div class="card-body">
+        <table class="table table-sm tblSubFactorVolumeDetails" align="right" style="width:auto;" data-factorid="@Model.RiskFactorId" data-subfactorid="@Model.RiskSubFactorId" data-countries="@Model.Countries" data-ratings="@Model.CountryWiseRating" data-volume="@Model.CountryWiseVolume">
+            <thead>
+                <tr>
+                    <th valign="middle">Risk Rating</th>
+                    <th valign="middle">Risk Score</th>
+                    <th valign="middle" class="nowrap" style="position:relative; padding-right:30px;">
+                        Volume
+                        <a href="javascript:void(0)" title="Volume Parameter" class="min-w-0 ml-1 noclick btnCountryVolume" style="position:absolute; right:10px;"><i class="fas fa-pen-fancy text-info"></i></a>
+                    </th>
+                    <th valign="middle">Weight</th>
+                    <th valign="middle">Weighted Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (scaleType == ScaleType.ThreePoint || scaleType == ScaleType.FourPoint)
+                {
+                    <tr style="vertical-align:middle" class="trVolume1">
+                        <th>Low</th>
+                        <td>@Model.Score1</td>
+                        <td>
+                            <input asp-for="@Model.Volume1" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score1" data-weight="@Model.Weight1" data-weightedscore="@Model.WeightedScore1">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight1</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore1</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume2">
+                        <th>Medium</th>
+                        <td>@Model.Score2</td>
+                        <td>
+                            <input asp-for="@Model.Volume2" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score2" data-weight="@Model.Weight2" data-weightedscore="@Model.WeightedScore2">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight2</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore2</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume3">
+                        <th>High</th>
+                        <td>@Model.Score3</td>
+                        <td>
+                            <input asp-for="@Model.Volume3" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score3" data-weight="@Model.Weight3" data-weightedscore="@Model.WeightedScore3">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight3</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore3</td>
+                    </tr>
+                    @if (scaleType == ScaleType.FourPoint)
+                    {
+                        <tr style="vertical-align:middle" class="trVolume4">
+                            <th>Critical</th>
+                            <td>@Model.Score4</td>
+                            <td>
+                                <input asp-for="@Model.Volume4" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score4" data-weight="@Model.Weight4" data-weightedscore="@Model.WeightedScore4">
+                            </td>
+                            <td align="center" class="tdVolumeWeight">@Model.Weight4</td>
+                            <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore4</td>
+                        </tr>
+                    }
+                }
+                @if (scaleType == ScaleType.FivePoint)
+                {
+                    <tr style="vertical-align:middle" class="trVolume1">
+                        <th>Very Low</th>
+                        <td>@Model.Score1</td>
+                        <td>
+                            <input asp-for="@Model.Volume1" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score1" data-weight="@Model.Weight1" data-weightedscore="@Model.WeightedScore1">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight1</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore1</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume2">
+                        <th>Low</th>
+                        <td>@Model.Score2</td>
+                        <td>
+                            <input asp-for="@Model.Volume2" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score2" data-weight="@Model.Weight2" data-weightedscore="@Model.WeightedScore2">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight2</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore2</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume3">
+                        <th>Medium</th>
+                        <td>@Model.Score3</td>
+                        <td>
+                            <input asp-for="@Model.Volume3" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score3" data-weight="@Model.Weight3" data-weightedscore="@Model.WeightedScore3">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight3</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore3</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume4">
+                        <th>High</th>
+                        <td>@Model.Score4</td>
+                        <td>
+                            <input asp-for="@Model.Volume4" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score4" data-weight="@Model.Weight4" data-weightedscore="@Model.WeightedScore4">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight4</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore4</td>
+                    </tr>
+                    <tr style="vertical-align:middle" class="trVolume5">
+                        <th>Critical</th>
+                        <td>@Model.Score5</td>
+                        <td>
+                            <input asp-for="@Model.Volume5" readonly="readonly" type="number" placeholder="Volume" class="txtSubFactorVolume form-control text-end" data-score="@Model.Score5" data-weight="@Model.Weight5" data-weightedscore="@Model.WeightedScore5">
+                        </td>
+                        <td align="center" class="tdVolumeWeight">@Model.Weight5</td>
+                        <td align="center" class="tdVolumeWeightedScore">@Model.WeightedScore5</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4" class="text-end">Total</th>
+                    <td class="tdTotalVolumeWeightedScore" align="center"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

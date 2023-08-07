@@ -1,0 +1,14 @@
+﻿@model List<QuestionsViewModel>
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                <input type="checkbox" class="form-check-input chkSelectQuestion" data-id="@item.Id"  />
+            </td>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+        </tr>
+    }
+}

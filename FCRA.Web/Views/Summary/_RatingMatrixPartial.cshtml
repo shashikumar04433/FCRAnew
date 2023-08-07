@@ -1,0 +1,147 @@
+﻿@using FCRA.Common;
+@model ScaleType
+@if(Model== ScaleType.ThreePoint){
+    <table class="table table-sm table-striped table-bordered text-center" style="vertical-align:middle;">
+        <thead>
+            <tr>
+                <th class="bg-dark text-white" colspan="4">Residual Risk Scoring</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td colspan="3" class="bg-secondary text-white" align="center">Inherent Risk</td>
+            </tr>
+            <tr>
+                <td class="bg-secondary text-white">Control Assessment</td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>Low</td>
+            </tr>
+            <tr>
+                <td>Adequate</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Needs Improvement</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Weak</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else if(Model== ScaleType.FourPoint){
+    <table class="table table-sm table-striped table-bordered text-center" style="vertical-align:middle;">
+        <thead>
+            <tr>
+                <th class="bg-dark text-white" colspan="5">Residual Risk Scoring</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td colspan="4" class="bg-secondary text-white" align="center">Inherent Risk</td>
+            </tr>
+            <tr>
+                <td class="bg-secondary text-white">Control Assessment</td>
+                <td>Critical</td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>Low</td>
+            </tr>
+            <tr>
+                <td>Strong</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Adequate</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Needs Improvement</td>
+                <td class="riskScore4">Critical</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Weak</td>
+                <td class="riskScore4">Critical</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else if (Model == ScaleType.FivePoint)
+{
+    <table class="table table-sm table-striped table-bordered text-center" style="vertical-align:middle;">
+        <thead>
+            <tr>
+                <th class="bg-dark text-white" colspan="6">Residual Risk Scoring</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td colspan="5" class="bg-secondary text-white">Inherent Risk</td>
+            </tr>
+            <tr>
+                <td class="bg-secondary text-white">Control Assessment</td>
+                <td>Critical</td>
+                <td>High</td>
+                <td>Medium-High</td>
+                <td>Medium</td>
+                <td>Low</td>
+            </tr>
+            <tr>
+                <td>Strong</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+                <td class="riskScore1">Low</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Adequate</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Needs Improvement</td>
+                <td class="riskScore4">Critical</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+                <td class="riskScore1">Low</td>
+                <td class="riskScore1">Low</td>
+            </tr>
+            <tr>
+                <td>Weak</td>
+                <td class="riskScore4">Critical</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore3">High</td>
+                <td class="riskScore2">Medium</td>
+            </tr>
+        </tbody>
+    </table>
+}

@@ -1,0 +1,260 @@
+﻿.mandatory-label {
+    color: #ff0000;
+}
+
+.companyLogo {
+    max-height: 70px;
+}
+
+.content-header {
+    position: relative;
+}
+
+    .content-header button.btn-icon {
+        position: absolute;
+        right: 0;
+        left: auto;
+        top: 0;
+        bottom: auto;
+    }
+
+input[type=date] {
+    position: relative;
+    /* width: 150px;
+    height: 20px;*/
+    color: white;
+}
+
+    input[type=date]:before {
+        position: absolute;
+        bottom: 5px;
+        left: 11px;
+        content: attr(data-date);
+        display: inline-block;
+        color: black;
+    }
+
+    input[type=date]::-webkit-datetime-edit, input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-button {
+        display: none;
+    }
+
+    input[type=date]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        bottom: 5px;
+        right: 11PX;
+        color: black;
+        opacity: 1;
+    }
+
+select.btn option {
+    text-align: left;
+    color: black;
+}
+
+.multiselect-container.dropdown-menu.show {
+    z-index: 999;
+}
+
+.currency {
+    text-align: right;
+    white-space: nowrap;
+}
+
+    .currency:before {
+        content: '₹ '
+    }
+
+input[type=number],.number {
+    text-align: right;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+input[readonly], textarea[readonly], input[disabled], textarea[disabled] {
+    background-color: #fbfbfb63 !important;
+}
+
+.tblProductItemDetails td {
+    vertical-align: top;
+}
+
+.multiselect-container.dropdown-menu {
+    max-height: calc(100vh - 20px) !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.custom-file-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bg-color-yellow {
+    background-color: #fbf875;
+}
+
+@media print {
+    * {
+        display: none !important;
+    }
+}
+
+
+.page-loader {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #a7a7a7a6;
+    z-index: 1000;
+}
+
+    .page-loader .txt {
+        color: #000;
+        text-align: center;
+        top: 40%;
+        position: relative;
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 1.5;
+    }
+
+.spinner {
+    position: relative;
+    top: 35%;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background-color: #5edf7a;
+    border-radius: 100%;
+    -webkit-animation: sk-scaleout 1s infinite ease-in-out;
+    animation: sk-scaleout 1s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        opacity: 0;
+    }
+}
+
+@keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+button.nav-link {
+    font-weight: bold;
+}
+
+.v-none {
+    visibility: hidden;
+}
+
+.rounded-5 {
+    border-radius: 5px;
+}
+
+.min-w-0 {
+    min-width: 0px;
+}
+
+
+.riskScore1 {
+    background-color: green !important;
+    color: #fff;
+}
+
+.riskScore2 {
+    background-color: darkorange !important;
+    color: #fff;
+}
+
+.riskScore3 {
+    background-color: red !important;
+    color: #fff;
+}
+.riskScore4 {
+    background-color: brown !important;
+    color: #fff;
+}
+.riskScore5 {
+    background-color: saddlebrown !important;
+    color: #fff;
+}
+
+input.riskScore1[disabled], input.riskScore1[readonly] {
+    background-color: #00800094 !important;
+    color: #fff;
+}
+
+input.riskScore2[disabled], input.riskScore2[readonly] {
+    background-color: #ff8c0078 !important;
+    color: #fff;
+}
+
+input.riskScore3[disabled], input.riskScore3[readonly] {
+    background-color: #ff000074 !important;
+    color: #fff;
+}
+
+input.riskScore4[disabled], input.riskScore4[readonly] {
+    background-color: #a52a2a7e !important;
+    color: #fff;
+}
+
+input.riskScore5[disabled], input.riskScore5[readonly] {
+    background-color: #8b451378 !important;
+    color: #fff;
+}
+
+.riskScore1TR {
+    border-left: 5px solid green !important;
+}
+
+.riskScore2TR {
+    border-left: 5px solid darkorange !important;
+}
+
+.riskScore3TR {
+    border-left: 5px solid red !important;
+}
+.riskScore4TR {
+    border-left: 5px solid brown !important;
+}
+.riskScore5TR {
+    border-left: 5px solid saddlebrown !important;
+}
+
+.side-navigation:hover .main-menu ul li ul li a span {
+    left: 0% !important;
+    width: 75% !important;
+    padding-left: 0px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+.submenu-title {
+    height: auto !important;
+}
+
+.side-navigation:hover .main-menu .menu .submenu ul li a {
+    left: 55px !important;
+}
+

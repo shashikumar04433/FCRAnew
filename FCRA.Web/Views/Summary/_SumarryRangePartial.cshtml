@@ -1,0 +1,60 @@
+﻿@using FCRA.Common;
+@model ScaleRangeViewModel
+@{
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    var has4 = scaleType == ScaleType.FourPoint || scaleType == ScaleType.FivePoint;
+    var has5 = scaleType == ScaleType.FivePoint;
+}
+<div class="card">
+    <div class="card-header">
+        Risk Assessment Criteria
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th class="bg-dark text-white" colspan="@((int)scaleType)">@Model.Name - Score Ranges</th>
+                    </tr>
+                    <tr>
+                        @if (scaleType == ScaleType.ThreePoint || scaleType == ScaleType.FourPoint)
+                        {
+                            <th class="riskScore1">Low</th>
+                            <th class="riskScore2">Medium</th>
+                            <th class="riskScore3">High</th>
+                            @if (scaleType == ScaleType.FourPoint)
+                            {
+                                <th class="riskScore4">Critical</th>
+                            }
+                        }
+                        @if (scaleType == ScaleType.FivePoint)
+                        {
+                            <th class="riskScore1">Low</th>
+                            <th class="riskScore2">Medium</th>
+                            <th class="riskScore3">Medium-High</th>
+                            <th class="riskScore4">High</th>
+                            <th class="riskScore5">Critical</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="nowrap"><= @(Model!.ScaleRange2 - 0.01M)</td>
+                        <td class="nowrap">@Model!.ScaleRange2 - @(Model!.ScaleRange3 - 0.01M)</td>
+                        <td class="nowrap">@(has4 ? "" : ">= ")@Model!.ScaleRange3 @(has4 ? ($"- {(Model!.ScaleRange4 - 0.01M)}") : "")</td>
+                        @if (scaleType == ScaleType.FourPoint || scaleType == ScaleType.FivePoint)
+                        {
+                            <td class="nowrap">@(has5 ? "" : ">= ")@Model!.ScaleRange4 @(has5 ? ($"- {(Model!.ScaleRange5 - 0.01M)}") : "")</td>
+                            if (scaleType == ScaleType.FivePoint)
+                            {
+                                <td class="nowrap">>= @Model!.ScaleRange5</td>
+                            }
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

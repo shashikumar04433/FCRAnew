@@ -1,0 +1,125 @@
+﻿@using FCRA;
+@using FCRA.Common;
+@model FCRA.ViewModels.AssessmentPillsViewModel
+@{
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    ViewData["Title"] = "Assessment Parameter";
+    int iRowIndex = 1;
+    int usertype = 0;
+    if (ViewBag.UserType != null)
+    {
+        usertype = (int)ViewBag.UserType;
+    }
+
+    var isAttachmentApplicable = false;
+
+    foreach (var item in Model.RiskSubFactors)
+    {
+        if (item.isAttachmentApplicable)
+        {
+            isAttachmentApplicable = true;
+        }
+    }
+    var uniqueSubFactors = Model.RiskSubFactors.Select(t => t.Name).Distinct();
+    var uniquestage = Model.RiskFactors.Select(t => t.Stage!.Name!.ToString()).FirstOrDefault();
+    var uniqueFactors = Model.RiskFactors.Select(t => t.Name!.ToString()).FirstOrDefault();
+    var uniqueRiskType = Model.RiskFactors.Where(t => t.RiskTypeId.HasValue).Select(t => new { Name = t.RiskType!.Name!.ToString() }).FirstOrDefault();
+    var uniqueGeographicPresence = Model.RiskFactors.Where(t => t.GeographicPresenceId.HasValue).Select(t => new { Id = t.GeographicPresence!.CountryId, Name = t.GeographicPresence.CountryName, t.GeographicPresence.Sequence }).FirstOrDefault();
+    var uniqueCustomerSegments = Model.RiskFactors.Where(t => t.CustomerSegmentId.HasValue).Select(t => new { Name = t.CustomerSegment!.Name!.ToString() }).FirstOrDefault();
+    var uniqueSegments = Model.RiskFactors.Where(t => t.BusinessSegmentId.HasValue).Select(t => new { Name = t.BusinessSegment!.Name!.ToString() }).FirstOrDefault();
+
+}
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6>
+                            @uniquestage @(uniqueRiskType != null ? $" > {uniqueRiskType?.Name}" : "") @(uniqueGeographicPresence != null ? $" > {uniqueGeographicPresence?.Name}" : "") @(uniqueCustomerSegments != null ? $" > {uniqueCustomerSegments?.Name}" : "") @(uniqueSegments != null ? $" > {uniqueSegments?.Name}" : "")
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sl. No.</th>
+                                        <th>Sub Factor</th>
+                                        <th>Description</th>
+                                        <th>Risk Weightage</th>
+                                        <th>Response</th>
+                                        <th>Risk Score</th>
+                                        <th>Weighted Score</th>
+                                        <th>Comments</th>
+                                        @if (isAttachmentApplicable)
+                                        {
+                                            <th>Attachment</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var subFactor in Model.RiskSubFactors)
+                                    {
+
+                                        <tr style="vertical-align:middle">
+                                            <td align="right">@iRowIndex</td>
+                                            <td>@subFactor.Name</td>
+                                            <td>@subFactor.Description</td>
+                                            @if (subFactor.IsExcludedInRisk)
+                                            {
+                                                <td align="center">NA</td>
+                                                <td align="center">NA</td>
+                                                <td align="center">NA</td>
+                                                <td align="center">NA</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@subFactor.RiskWeightage%</td>
+                                                <td>@subFactor.Response</td>
+
+                                                @if (subFactor.Score.HasValue)
+                                                {
+                                                    <td class="riskScore" align="center" valign="middle">@subFactor.Score.Value</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="riskScore" align="center" valign="middle">-</td>
+                                                }
+                                                <td class="riskWeightedScore" data-weightedpercent="@subFactor.RiskWeightage">@(subFactor.Score.HasValue ? (subFactor.RiskWeightage * subFactor.Score.Value / 100).ToTwoDecimal() : "")</td>
+                                                <td>
+                                                    @subFactor.Assumptions
+                                                </td>
+                                                @if (subFactor.Id > 0 && isAttachmentApplicable)
+                                                {
+                                                    <td>
+                                                        @if (subFactor.isAttachmentApplicable && subFactor?.riskSubFactorAttachment.Count > 0)
+                                                        {
+                                                            foreach (var item in subFactor!.riskSubFactorAttachment)
+                                                            {
+                                                                <br />
+                                                                <a href="@Url.Action("DownloadFile","Home",new{area=""})?p=@Html.UrlEncoder.Encode(item.FilePath!)&fn=@Html.UrlEncoder.Encode(item.FileName!)" class="download" target="_blank">@item.FileName</a>
+
+                                                            }
+                                                        }
+                                                    </td>
+                                                }
+                                            }
+                                        </tr>
+                                        iRowIndex += 1;
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

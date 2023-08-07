@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    <div class="col-lg-4">
+        <ul class="nav nav-pills custom-navpills">
+            <li class="nav-item">
+                <a class="aDLink nav-link noclick active" data-type="2" data-bs-toggle="pill" href="javascript:void(0)">Summary</a>
+            </li>
+            <li class="nav-item">
+                <!-- active -->
+                <a class="aDLink nav-link noclick" data-type="1" data-bs-toggle="pill" href="javascript:void(0)">Charts</a>
+            </li>
+            <li class="nav-item">
+                <!-- active -->
+                <a class="aDLink nav-link noclick" data-type="3" data-bs-toggle="pill" href="javascript:void(0)">Comparison</a>
+            </li>
+        </ul>
+        <div class="mt-2">
+            <a href="#" onclick="DownloadUpdatedFile()" class="link-info"><i class="fas fa-file-word"></i> Download Report</a>
+            <a href="~/WordTemplates/Sample FCRA Report Updated.docx" class="link-info" id="summaryRepoLink" style="display:none"><i class="fas fa-file-word"></i> Download Report</a>
+        </div>
+    </div>
+    <div class="col-lg-4" id="divRiskType">
+        <label class="form-label">Financial Crime Risk Type</label>
+        <select id="ddlRiskType" class="form-select">
+            @foreach (var item in (IEnumerable<Select2Item>)ViewBag.RiskTypes)
+            {
+                <option value="@item.id.Encrypt()">@item.text</option>
+            }
+        </select>
+    </div>
+    <div class="col-lg-4" id="divLevel">
+        <label class="form-label">Risk Assessment Result Level</label>
+        <div class="input-group">
+            <select id="ddlLevel" class="selectpicker" multiple data-live-search="false">
+                <option value="2" selected="selected">Risk Type Level</option>
+                <option value="3">Geographics Presence Level</option>
+                <option value="4">Business Segment Level</option>
+                <option value="5">Sub Unit Level</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="tab-content mt-3">
+    <div class="tab-pane active" id="divContent">
+    </div>
+</div>
+
+<div class="modal fade" id="divGeograhic" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1></h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="GeographicContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divsummaryJuri" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1></h1>
+                <button type="button" class="close float-end" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="summaryJuriContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divSummaryBusinessSegment" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1></h1>
+                <button type="button" class="close float-end" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="SummaryBusinessSegmentContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divSummaryResponseDetail" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1></h1>
+                <button type="button" class="close float-end" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="SummaryResponseDetailContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section extracss{
+    <link href="~/css/home-index.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        .clsDivider {
+            border: 2px solid #699da9 !important;
+            padding: 0px !important;
+            background-color: #699da9 !important;
+        }
+    </style>
+}
+
+@section Scripts{
+    <!--high chart-->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="@Url.Action("HomeIndex","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Home-Index.js" asp-append-version="true"></script>
+    <script src="~/js/RiskCompare-Index.js" asp-append-version="true"></script>
+}

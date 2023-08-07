@@ -1,0 +1,28 @@
+﻿@model CustomerViewModel
+@if (Model != null && Model.Forms.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Default Name</th>
+                <th>Custom Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Forms.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="Forms[i].CustomerId" type="hidden" class="id" />
+                        <input asp-for="Forms[i].FormId" type="hidden" class="id" />
+                        @Model.Forms[i].DefaultFormName
+                    </td>
+                    <td>
+                        <input asp-for="Forms[i].FormName" placeholder="Enter Custom Form Name" />
+                        <span asp-validation-for="Forms[i].FormName" class="text-danger"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

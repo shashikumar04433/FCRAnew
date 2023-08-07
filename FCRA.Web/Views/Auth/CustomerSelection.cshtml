@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CustomerViewModel>
+@{
+    ViewData["Title"] = "Customer Selection";
+    var iIndex = 0;
+}
+<h2 class="chart-area-title">
+    @ViewData["Title"]
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example" data-order='[[1, "asc"]]' class="table table-sm table-hover table-striped mb-0 custom-table datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th data-orderable="false" style="width:10%">Sl. No.</th>
+                        <th>Customer</th>
+                        <th data-orderable="false" style="width:10%">Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            iIndex += 1;
+                            <tr>
+                                <td>@iIndex</td>
+                                <td>@item.Name</td>
+                                <td><button data-customer="@item.Id" data-name="@item.Name" data-scale="@((int)item.ScaleType)" class="btn btn-outline-info btnSelectCustomer" data-toggle="tooltip" title="Select Customer"><i class="fa fa-check"></i></button></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<form asp-action="CustomerSelection" asp-controller="Auth" method="post" id="frmCustomerSelection">
+    <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+    <input type="hidden" name="customerId" id="customerId" />
+    <input type="hidden" name="customerScale" id="customerScale" />
+    <input type="hidden" name="customerName" id="customerName" />
+</form>
+@section scripts{
+    <script src="~/js/auth-customerselection.js"></script>
+}

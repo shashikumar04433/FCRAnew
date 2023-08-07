@@ -1,0 +1,42 @@
+﻿<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<style type="text/css">
+    * {
+        font-family: 'Lato', sans-serif !important;
+        color: #2b2b2b;
+        line-height: 1.5;
+    }
+
+
+    table thead th, table td {
+        font-weight: 400;
+    }
+
+    .leftIndexCover {
+        height: 95%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .rightIndexContainer {
+        width: 55%;
+        display: inline-block;
+        float:right;
+    }
+</style>
+<img src="{{IndexImageCover}}" class="leftIndexCover" />
+<div class="rightIndexContainer">
+    <p style="font-size:20pt; font-weight:300;">INDEX</p>
+    <table style="width: 100%; font-size: 14.55pt; font-weight: 400;" border="0">
+        <thead>
+            <tr>
+                <th align="left">S. No.</th>
+                <th align="left">Name</th>
+                <th align="left">Page No.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{IndexContent}}
+        </tbody>
+    </table>
+</div>

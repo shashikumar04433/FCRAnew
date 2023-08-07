@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RiskCriteriaViewModel>
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var iIndex = 0;
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+}
+<h2 class="chart-area-title">
+    @ViewData["Title"] Master
+    <div class="ms-auto">
+        @if (permissions.Add)
+        {
+            <a asp-area="Admin" asp-action="Item" asp-controller="@controller" class="btn btn-primary ps-4 pe-4 fst-normal me-3">
+                <i class="fas fa-plus me-2"></i>Add New
+            </a>
+        }
+    </div>
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example" data-order='[[1, "asc"]]' class="table table-sm table-hover table-striped mb-0 custom-table datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th data-orderable="false">Sl. No.</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Is Active</th>
+                        <th>Last Action By</th>
+                        <th>Last Action On</th>
+                        <th data-orderable="false">@permissions.EditViewText</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            iIndex += 1;
+                            <tr>
+                                <td>@iIndex</td>
+                                <td data-order="@item.Sequence">@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>@(item.IsActive ? "Active" : "In active")</td>
+                                <td>@item.LastActionBy</td>
+                                <td data-order="@item.LastActionOnOrder">@item.LastActionOnStr</td>
+                                <td><a asp-area="Admin" asp-action="Item" asp-controller="@controller" asp-route-iId="@EncriptorUtility.Encrypt(item.Id.ToString(),true)" data-toggle="tooltip" title="@permissions.EditViewText"><i class="@permissions.EditViewIconClass"></i></a></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

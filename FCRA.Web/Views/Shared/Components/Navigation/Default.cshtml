@@ -1,0 +1,78 @@
+﻿@model FCRA.ViewModels.Account.UserPermissions
+@{
+    var hasAdmin = false;
+    if (ViewBag.HasAdmin != null)
+        hasAdmin = (bool)ViewBag.HasAdmin;
+    //var iIndex = 0;
+}
+<ul class="menu" id="main-menu-navigation" data-menu="menu-navigation">
+    <li>
+        <a asp-area="" asp-controller="Summary" asp-action="Sector" class="d-flex align-items-center">
+            <i class="fas fa-project-diagram"></i>
+            <span>Sector wise Summary</span>
+        </a>
+    </li>
+    @if (Model != null)
+    {
+        @foreach (var form in Model.Forms.Where(t => !t.MenuId.HasValue).ToList())
+        {
+            <li>
+                <a asp-area="@form.Area" asp-controller="@form.Controller" asp-action="@form.Action" class="d-flex align-items-center">
+                    <i class="@form.IconClass"></i>
+                    <span>@form.Name</span>
+                </a>
+            </li>
+        }
+        @foreach (var mainMenu in Model.Menus.Where(t => !t.ParentMenuId.HasValue))
+        {
+            var menuForms = Model?.Forms?.Where(t => t.MenuId.HasValue && t.MenuId.Value == mainMenu.Id)?.ToList();
+            var subMenues = Model?.Menus?.Where(t => t.ParentMenuId.HasValue && t.ParentMenuId == mainMenu.Id)?.ToList();
+            if ((menuForms != null && menuForms.Count > 0) || (subMenues != null && subMenues.Count > 0))
+            {
+                <li class="">
+                    <a href="#" class="menu-title"><i class="@mainMenu.IconClass"></i> <span><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-down d-none"></i> @mainMenu.Name</span></a>
+                    <ul class="submenu d-none">
+                        @if (menuForms != null && menuForms.Count > 0)
+                        {
+                            @foreach (var form in menuForms)
+                            {
+                                <li>
+                                    <a asp-area="@form.Area" asp-controller="@form.Controller" asp-action="@form.Action">
+                                        <i class="@form.IconClass"></i>
+                                        @form.Name
+                                    </a>
+                                </li>
+                            }
+                        }
+                        @if (subMenues != null && subMenues.Count > 0)
+                        {
+                            foreach (var subMenu in subMenues)
+                            {
+                                var menuFormsSub = Model?.Forms?.Where(t => t.MenuId.HasValue && t.MenuId.Value == subMenu.Id)?.ToList();
+                                @if (menuFormsSub != null && menuFormsSub.Count > 0)
+                                {
+                                    <li class="">
+                                        <a href="#" class="submenu-title"><i class="@subMenu.IconClass"></i> <span><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-down d-none"></i> @subMenu.Name</span></a>
+                                        <ul class="subsubmenu d-none">
+                                            @foreach (var subForm in menuFormsSub)
+                                            {
+                                                <li>
+                                                    <a asp-area="@subForm.Area" asp-controller="@subForm.Controller" asp-action="@subForm.Action">
+                                                        <i class="@subForm.IconClass"></i>
+                                                        @subForm.Name
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            //iIndex += 1;
+        }
+    }
+</ul>

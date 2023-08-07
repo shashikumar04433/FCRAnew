@@ -1,0 +1,20 @@
+﻿@using FCRA.Common;
+@model List<CountryVolumeResponseViewModel>
+@{
+    var iIndex = 0;
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+@foreach (var item in Model)
+{
+    iIndex += 1;
+    <tr>
+        <td>@iIndex</td>
+        <td>@item.Name</td>
+        <td class="@Utilitiy.GetRatingCssClass((int)item.RiskRating)">@Utilitiy.GetRatingText(scaleType,(int)item.RiskRating)</td>
+        <td>
+            <input asp-for="@item.Volume" type="number" placeholder="Volume" class="txtSubFactorCountryVolume form-control text-end" data-countryid="@item.Id" data-rating="@((int)item.RiskRating)">
+        </td>
+    </tr>
+}

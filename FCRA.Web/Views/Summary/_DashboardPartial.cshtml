@@ -1,0 +1,91 @@
+﻿@using FCRA.Common;
+@model List<RiskFactorViewModel>
+@{
+    var riskStage = ViewBag.StageVal;
+
+}
+<h2 class="chart-area-title">Residual Risk</h2>
+<div class="row">
+    <div class="col-12">
+        <div class="card custom-card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Residual Risk Heat Map  </h3>
+                <div>
+                    <div class="height-300" id="heatmap-chart-one"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*   <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-6 ps-md-2  mb-2">
+    <div class="card custom-card">
+    <div class="card-body text-center">
+    <h3 class="card-title">Residual Risk Heat Map</h3>
+    <div>
+    <div class="height-300" id="heatmap-chart-two"></div>
+    </div>
+    </div>
+    </div>
+    </div>*@
+</div>
+
+<h2 class="chart-area-title">Inherent Risk </h2>
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 ps-md-2  mb-2">
+        <div class="card custom-card pb-0">
+            <div class="card-body text-center">
+                <h3 class="card-title">Retail Banking Group</h3>
+                <div>
+                    <div class="height-300" id="retailinherentrisk"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 ps-md-2  mb-2">
+        <div class="card custom-card pb-0">
+            <div class="card-body text-center">
+                <h3 class="card-title">Corporate Banking Group</h3>
+                <div>
+                    <div class="height-300" id="corporateinherentrisk"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 pe-md-2 mb-2">
+        <div class="card custom-card pb-0">
+            <div class="card-body text-center">
+                <h3 class="card-title">Treasury Banking Group</h3>
+                <div>
+                    <div class="height-300" id="aggregateinherentrisk"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="chart-area-title">Control Assessment</h2>
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 pe-md-2 mb-2">
+        <div class="card custom-card pb-0">
+            <div class="card-body text-center">
+                <h3 class="card-title">Overall Control Assessment Evaluation</h3>
+                <div>
+                    <div class="height-300" id="overallcontrolassessment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 ps-md-2  mb-2">
+        <div class="card custom-card pb-0">
+            <div class="card-body text-center">
+                <h3 class="card-title">Area Wise Control Assessment  </h3>
+                <div>
+                    <div class="height-300" id="areawisecontrolassessment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(riskStage != null){
+<input hidden="hidden" value="@riskStage[0].Category" id="hiddRiskAssessment" />
+<input hidden="hidden" value="@riskStage[1].Category" id="hiddControlAssessment" />
+}

@@ -1,0 +1,71 @@
+﻿@model List<RiskFactorProductServiceMappingViewModel>
+@{
+    var iIndex = 0;
+    var formPermissions = ViewContext.HttpContext.GetFormPermissions();
+    FCRA.Common.ScaleType scaleType = FCRA.Common.ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (FCRA.Common.ScaleType)ViewBag.ScaleType;
+}
+<table class="table" id="tblRolePermissions">
+    <thead>
+        <tr>
+            <th rowspan="2" style="text-align:center;width:105px;">Sl. No.</th>
+            <th rowspan="2" style="text-align:left;">Product & Services</th>
+            <th rowspan="2" style="width:50px;text-align:center;">Select</th>
+            <th colspan="4" style="text-align:center;">Range</th>
+        </tr>
+        <tr>
+            <th style="width:80px;">Scale 2</th>
+            <th style="width:80px;">Scale 3</th>
+            @if (scaleType == FCRA.Common.ScaleType.FourPoint || scaleType == FCRA.Common.ScaleType.FivePoint)
+            {
+                <th style="width:80px;">Scale 4</th>
+                if (scaleType == FCRA.Common.ScaleType.FivePoint)
+                {
+                    <th style="width:80px;">Scale 5</th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            iIndex += 1;
+            <tr>
+                <td style="text-align:right;">@iIndex</td>
+                <td>@item.ProductServiceName</td>
+                <td style="text-align:center">
+                    <input asp-for="@item.IsSelected" datatype="View" class="form-check-input chkSelect" data-factorid="@item.RiskFactorId" data-subfactorid="@item.RiskSubFactorId" data-productid="@item.ProductId" />
+                </td>
+                <td>
+                    <input asp-for="@item.ScaleRange2" type="number" class="txtScaleRange2" />
+                </td>
+                <td>
+                    <input asp-for="@item.ScaleRange3" type="number" class="txtScaleRange3" />
+                </td>
+                @if (scaleType == FCRA.Common.ScaleType.FourPoint || scaleType == FCRA.Common.ScaleType.FivePoint)
+                {
+                    <td>
+                        <input asp-for="@item.ScaleRange4" type="number" class="txtScaleRange4" />
+                    </td>
+                    if (scaleType == FCRA.Common.ScaleType.FivePoint)
+                    {
+                        <td>
+                            <input asp-for="@item.ScaleRange5" type="number" class="txtScaleRange5" />
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+    @if (Model != null && Model.Any() && formPermissions.Edit)
+    {
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:center">
+                    <button type="button" id="btnUpdateMapping" class="btn btn-primary rounded-10 font-weight-600 px-4 mt-1 waves-effect waves-float waves-light">Update</button>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>

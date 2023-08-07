@@ -1,0 +1,94 @@
+﻿@using FCRA.Common;
+@model List<GeographyRiskViewModel>
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    var iIndex = 0;
+    ViewData["Title"] = _masterType;
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"]
+            </h4>
+            <div class="col">
+                <a asp-area="Admin" asp-controller="@controller" asp-action="Index" class="text-decoration-none float-end"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="@controller" asp-action="IndexRange" method="post">
+
+            <div class="table-responsive">
+                <table id="exampledd" data-order='[[3, "desc"],[1, "asc"]]' class="table table-sm table-hover table-striped mb-0 custom-table datatable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th data-orderable="false">Sl. No.</th>
+                            <th>Country</th>
+                            <th>Risk Rating</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                iIndex += 1;
+                                <tr>
+                                    <td>@iIndex</td>
+                                    <td>
+                                        @Model[i].Name
+                                        <input asp-for="@Model[i].CountryId" type="hidden" />
+                                        <input asp-for="@Model[i].Id" type="hidden" />
+                                        <input asp-for="@Model[i].CustomerId" type="hidden" />
+                                    </td>
+                                    <td>
+                                        <div class="col-12 col-md-6 col-lg-4">
+                                            <select asp-for="@Model[i].RiskRating" class="form-select">
+                                                <option value="">--Select--</option>
+                                                @if (scaleType == ScaleType.ThreePoint || scaleType == ScaleType.FourPoint)
+                                                {
+                                                    <option value="1">Low</option>
+                                                    <option value="2">Medium</option>
+                                                    <option value="3">High</option>
+                                                    if (scaleType == ScaleType.FourPoint)
+                                                    {
+                                                        <option value="4">Critical</option>
+                                                    }
+                                                }
+                                                else if (scaleType == ScaleType.FivePoint)
+                                                {
+                                                    <option value="1">Low</option>
+                                                    <option value="2">Low-Medium</option>
+                                                    <option value="3">Medium</option>
+                                                    <option value="4">High</option>
+                                                    <option value="5">Critical</option>
+                                                }
+                                            </select>
+
+                                        </div>
+                                    </td>
+                                    <td data-order="@(Model[i].IsActive ? 1 : 0)">
+                                        <div class="form-check form-check-inline">
+                                            <input asp-for="@Model[i].IsActive" class="form-check-input" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary ps-4 pe-4"><i class="fas fa-save me-2"></i>Save</button>
+            </div>
+        </form>
+    </div>
+</div>

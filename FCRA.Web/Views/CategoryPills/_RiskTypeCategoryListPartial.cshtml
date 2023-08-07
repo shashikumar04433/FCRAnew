@@ -1,0 +1,44 @@
+﻿@model IEnumerable<RiskTypeViewModel>
+@{
+    bool hasProgress = false;
+    if (ViewBag.HasProgress != null)
+        hasProgress = (bool)ViewBag.HasProgress;
+    List<RegisterCompletionViewModel> list = new();
+    if (ViewBag.RegisterCompletion != null)
+    {
+        list = (List<RegisterCompletionViewModel>)ViewBag.RegisterCompletion;
+    }
+}
+<div class="card box">
+    <div class="card-header">Risk Type</div>
+    <div class="card-body d-flex justify-content-md-center align-items-center">
+        <div class="d-grid">
+            @foreach (var item in Model)
+            {
+                <button data-id="@item.Id.Encrypt()" data-ex="@item.ExcludeChildCategory.ToString().ToLower()" class="btn btn-outline-primary position-relative rounded mb-2 btnRiskType risktype">
+                    @item.Name
+                    @if (hasProgress)
+                    {
+                        var percent = 0;
+                        var rc = list.FirstOrDefault(t => t.Id == item.Id);
+                        if (rc != null)
+                        {
+                            percent = rc.TotalPercentage;
+                        }
+                        <div class="progress position-absolute bottom-0 w-100 start-0 rounded-0">
+                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width:@(percent)%;"></div>
+                        </div>
+                        if (percent < 100)
+                        {
+                            <span title="@(percent)% Completed" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">?</span>
+                        }
+                        else
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"><i class="fas fa-check"></i></span>
+                        }
+                    }
+                </button>
+            }
+        </div>
+    </div>
+</div>

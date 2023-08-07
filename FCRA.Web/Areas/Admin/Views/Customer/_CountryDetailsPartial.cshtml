@@ -1,0 +1,33 @@
+﻿@model CustomerViewModel
+@*@if (Model != null && Model.Countries.Any())
+{
+    for (var i = 0; i < Model.Countries.Count; i++)
+    {
+        <div class="row mb-2 border-bottom country-item">
+            <div class="col-12">
+                Country <span class="spCount">@(i + 1)</span>
+                <input asp-for="Countries[i].CustomerId" type="hidden" class="id" />
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Countries[i].CountryId"></label>
+                <select asp-for="Countries[i].CountryId" asp-items="ViewBag.CountryId" class="form-select"></select>
+                <span asp-validation-for="Countries[i].CountryId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Countries[i].RiskRating"></label>
+                <select asp-for="Countries[i].RiskRating" class="form-select">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                </select>
+                <span asp-validation-for="Countries[i].RiskRating" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 @(Model.Id>0?"d-none":"")">
+                <button class="btn btn-danger px-10 mt-1 delete" data-repeater-delete type="button">
+                    <i data-feather="x" class="mr-10"></i><span>Delete</span>
+                </button>
+            </div>
+        </div>
+    }
+
+}*@

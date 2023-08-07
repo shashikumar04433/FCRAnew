@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="loading white-layout" data-textdirection="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FCRA</title>
+    <!-- BEGIN: Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon-16x16.png">
+    <link rel="manifest" href="~/site.webmanifest">
+    <!-- END: Icon -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+    <link rel="stylesheet" href="~/assets/bootstrap-5.0.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/style/common.css" />
+    <link rel="stylesheet" href="~/assets/style/login.css" />
+
+    <script type="text/javascript" src="~/assets/jquery-3.6.1.js"></script>
+    <script type="text/javascript" src="~/assets/popper.min.js"></script>
+    <script type="text/javascript" src="~/assets/bootstrap-5.0.2/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FCRA.Web.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("extracss", required: false)
+</head>
+<body class="login-wrapper bg-wrapper">
+    <div class="page-loader">
+        <div class="spinner"></div>
+        <div class="txt">Please<br>Wait..</div>
+    </div>
+    <!-- BEGIN: Content-->
+    <div class="container ">
+        <div class="row">
+            <div class="col-12 mt-5">
+                @*<a href="#" class="brand-logo" style="text-decoration:none;">
+                    <img alt="" src="~/assets/images/cbd_logo.png" style="height:150px; width:auto;" asp-append-version="true" />&nbsp;
+                </a>*@
+            </div>
+            <div class="col-8 d-none d-md-flex text-center pt-2" style="min-height: calc(100vh - 172px); align-items: center; justify-content: center;">
+                <img class="risk-image" src="~/assets/images/risk-management.png" />
+            </div>
+            <div class="col-4 mt-2 login-wrap">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

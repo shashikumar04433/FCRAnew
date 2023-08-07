@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CustomerVersionMasterViewModel>
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var iIndex = 0;
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    ViewData["Title"] = "Risk Assessment Version";
+}
+
+<h2 class="chart-area-title">
+    @ViewData["Title"]
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tblRiskAssessmentVersion" class="table table-sm table-hover table-striped mb-0 custom-table datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th data-orderable="false">Sl. No.</th>
+                        <th>Versions</th>
+                        <th data-orderable="false">Risk Register</th>
+                        <th data-orderable="false">Annual Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            iIndex += 1;
+                            <tr>
+                                <td>@iIndex</td>
+                                <td>Risk Assessment for @item.CreatedOn.ToString("dd/MMM/yyyy")</td>
+                                <td>
+                                    <a asp-area="Admin" asp-action="Download" asp-controller="@controller" asp-route-versionId="@EncriptorUtility.Encrypt(item.Id.ToString(),true)" data-toggle="tooltip" title="Download Version">Download</a>
+                                    @*<a href="#" onclick="DownloadUpdatedExcelFile('@EncriptorUtility.Encrypt(item.Id.ToString(),true)')" data-toggle="tooltip" title="Download Version">Download</a>*@
+                                </td>
+                                <td>
+                                    <a href="#" onclick="DownloadUpdatedFile('@EncriptorUtility.Encrypt(item.Id.ToString(),true)')" data-toggle="tooltip" title="Download Version">Download</a>
+                                    <a href="~/WordTemplates/Risk Assessment Version.docx" class="link-info" id="summaryVersionRepoLink" style="display:none">Download</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="@Url.Action("HomeIndex","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/RiskAssessmentVersion-Index.js" asp-append-version="true"></script>
+}
+

@@ -1,0 +1,505 @@
+﻿<html>
+<head>
+    <meta charset='utf-8'>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Lato', sans-serif;
+            color: #2b2b2b;
+            line-height: 1.5;
+        }
+
+        img {
+            border: none;
+        }
+
+        .normalLineHeight {
+            line-height: normal !important;
+        }
+
+        .description {
+            white-space: normal;
+        }
+
+        .singleLineHeight {
+            line-height: 1 !important;
+        }
+
+        .nowrap {
+            white-space: nowrap !important;
+        }
+
+        table thead th, table td {
+            font-weight: 400;
+        }
+
+        table.tblQuotationItems {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            table.tblQuotationItems tr, table.tblClientDetails tr {
+                page-break-inside: avoid;
+            }
+
+        thead {
+            display: table-header-group;
+        }
+
+        table.tblQuotationItems > tfoot {
+            display: table-footer-group;
+        }
+        .tblItemSummary {
+            text-transform: uppercase;
+        }
+
+        .tblItemSummary th, .tblItemSummary td {
+            line-height: 2 !important;
+        }
+
+        .rtgstd {
+            font-weight: 300;
+            font-size: 7pt;
+            line-height: normal !important;
+            padding: 0px;
+        }
+
+
+        .templateContainer .templateBox {
+            padding-right: 2%;
+        }
+
+            .templateContainer .templateBox img, .divPageContainer .templateBox img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+        .tblTemplateDescription {
+            font-size: 8.5pt;
+            line-height: 1;
+        }
+
+            .tblTemplateDescription td {
+                padding-left: 30px;
+            }
+
+            .tblTemplateDescription td, .tblTemplateDescription th {
+                text-align: left;
+            }
+
+        .templateBox, .templatePageHeader, .templateTitle {
+            position: relative;
+        }
+
+        [data-descriptionnumber] {
+            text-shadow: 2px 2px 3px #fff;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .optionPageContainer {
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            font-size: 35pt !important;
+            font-weight: 300;
+            display: flex;
+        }
+
+        .templateOptionName {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            height: 100%;
+            text-align: center;
+            margin-left: -30px;
+            vertical-align: middle;
+        }
+
+        .templateContainer {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .templateOptionName p {
+            position: absolute;
+            white-space: nowrap;
+            -moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+            -webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+            transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+            line-height: 1;
+            font-size: 15pt;
+            font-weight: 400;
+            top: 50%;
+            left: 50%;
+        }
+
+        .spPageTitle {
+            font-size: 10pt;
+            font-weight: 400;
+        }
+
+        .wp100 {
+            width: 100%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 100%;
+            -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .wp30 {
+            width: 30%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 30%;
+            -ms-flex: 0 0 30%;
+            flex: 0 0 30%;
+            max-width: 30%;
+            width: 30%;
+        }
+
+        .wp33 {
+            width: 33%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 33%;
+            -ms-flex: 0 0 33%;
+            flex: 0 0 33%;
+            max-width: 33%;
+            width: 33%;
+        }
+
+        .wp35 {
+            width: 35%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 35%;
+            -ms-flex: 0 0 35%;
+            flex: 0 0 35%;
+            max-width: 35%;
+            width: 35%;
+        }
+
+        .wp40 {
+            width: 40%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 40%;
+            -ms-flex: 0 0 40%;
+            flex: 0 0 40%;
+            max-width: 40%;
+            width: 40%;
+        }
+
+        .wp50 {
+            width: 50%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 50%;
+            -ms-flex: 0 0 50%;
+            flex: 0 0 50%;
+            max-width: 50%;
+            width: 50%;
+        }
+
+        .wp60 {
+            width: 60%;
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 60%;
+            -ms-flex: 0 0 60%;
+            flex: 0 0 60%;
+            max-width: 60%;
+            width: 60%;
+        }
+
+
+        .hp100 {
+            height: 556px;
+        }
+
+        .hp60 {
+            height: 333px;
+        }
+
+        .hp50 {
+            height: 276px;
+        }
+
+        .hp40 {
+            height: 220px;
+        }
+
+        .hp25 {
+            height: 136px;
+        }
+
+        .hp20 {
+            height: 108px;
+        }
+
+        .mrlp33 {
+            margin-left: 33%;
+        }
+
+        .mrlp16 {
+            margin-left: 16.5%;
+        }
+
+        .mrrp6 {
+            margin-right: 16.5%;
+        }
+
+        div.grid {
+            width: 40%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+            div.grid div.grid-item {
+                width: 50%;
+                height: 25%;
+                float: right;
+                position: relative;
+            }
+
+            div.grid div.grid-item-large {
+                width: 50%;
+                height: 33%;
+                float: right;
+                position: relative;
+            }
+
+                div.grid div.grid-item .image, div.grid div.grid-item-large .image {
+                    padding: 3px;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
+
+        .templateContainer .templateBox img.percentStoreImage {
+            position: absolute !important;
+            left: 0;
+            bottom: 0;
+            height: 40px !important;
+            width: auto !important
+        }
+
+        img.overlap, img.overlapsubimage {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+        }
+
+        div.templateContainer div.detailsContainer {
+            height: 550px;
+        }
+
+            div.templateContainer div.detailsContainer div.detailsBackground {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+            }
+
+        div.grid-details, .imageContainer {
+            position: relative;
+        }
+
+        div.templateContainer div.detailsContainer div.detailsBackground div.grid-details div.templateBox {
+            position: relative;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            justify-content: flex-start;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            margin: 2px 0px;
+        }
+
+        div.templateBox .details-content {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+
+        .image {
+            width: 100%;
+            min-height: 1vw;
+            object-fit: contain;
+            object-position: top;
+            height: 100%;
+            height: -moz-available;
+            height: -webkit-fill-available;
+            height: fill-available;
+        }
+    </style>
+</head>
+<body>
+    {{PageContent}}
+
+    {{OptionSummaryContent}}
+
+    <!--Terms & Conditions start-->
+    <div style="page-break-before:always"></div>
+    <div style="font-weight: 100; font-size: 17pt;" class="normalLineHeight">TERMS & CONDITIONS</div>
+    <br />
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">PRICE VALIDITY</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        The prices mentioned in the quotation will be valid for 15 days only. However, if during this period of 15 days, there is any change in Custom Duty or any other cess or surcharge levied on imports, it would be immediately applicable even to the current quotation.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">GST & ANY OTHER TAXES, CESS OR SURCHARGE</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Prices quoted are inclusive of GST, any other taxes, cess or surcharge.<br />
+        GST No.: {{CompanyGSTNumber}}<br />
+        PAN No.: {{CompanyPANNumber}}
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DELIVERY TIME</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Standard Delivery time is 12-16 weeks or in special cases, as per mutual understanding with the customer.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">PAYMENT TERMS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        OPTION 1 - 75% advance & 25% after 16 weeks from date of advance payment, or delivery, whichever is earlier.<br />
+        OPTION 2 - 50% advance & 50% pro-rata after delivery, however the balance must be paid within 16 weeks from the date of advance payment.<br />
+        In case the payment is not received within 4 weeks from the date of arrival of goods at our warehouse, the client will have to pay new rates as per existing price list at the time of delivery, or we will be free to sell the goods and advice the customer new timelines for delivery for supply of goods against his order.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">ORDER CONFIRMATION</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        The order would be deemed to be confirmed against receipt of a Purchase Order along with delivery date for the material, or a written confirmation of the Performa invoice; However in the absence of above, receipt of advance with order acceptance number would be treated as order confirmation with the clear understanding that the terms & conditions have been agreed and accepted. If the delivery date is not mentioned it will be considered to be 16 weeks from the date of advance.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">INVOICING DETAILS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        If Billing is in company name, GSTIN number is required to process the orders.<br />
+        If billing is in individual name, PAN number is required to process the orders.<br />
+        Quoting of PAN will be required for transactions of an amount exceeding Rs.2 lakh regardless of the mode of payment.
+    </p>
+    <div style="page-break-before:always"></div>
+    <div style="font-weight: 100; font-size: 17pt;" class="normalLineHeight">TERMS & CONDITIONS</div>
+    <br />
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DELIVERY ADDRESS & TERMS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Complete delivery address, along with the contact details of the person responsible for inspection of goods and taking up delivery, should be mentioned in the Purchase Order; or should be sent to us by email or communicated to us via the salesperson.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DELIVERY CHARGES</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        1% of the order value<br />
+        Outstation delivery charges will be as per actuals.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DELIVERY RESTRICTIONS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        If there are any special conditions, time restrictions, restrictions of vehicular movement, restriction on type of vehicles, special permissions required for delivery, special permission required for service lift usage, should be communicated to us in advance before delivery request.<br />
+        Delivery charges are applicable only for delivery till the ground floor.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DELIVERY TIME POST DELIVERY REQUEST</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Post 48 hours from the confirmation of delivery.
+    </p>
+
+    <div style="page-break-before:always"></div>
+    <div style="font-weight: 100; font-size: 17pt;" class="normalLineHeight">TERMS & CONDITIONS</div>
+    <br />
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">CANCELLATION OF ORDER OR OF ANY ARTICLE IN THE CONFIRMED ORDER</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        All sales are final; once the order is placed the entire order or any article in the order cannot be cancelled; however, due to any reason, you wish to cancel the order or any article, 50% of the respective value will have to be paid as a Cancellation Charge.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">SALE RETURN</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Once the goods are delivered at site, sale return will be subjected to the following conditions:<br />
+        It is absolutely necessary to have the original packing in perfect condition. In case there is any damage or scratches; if the article is in dirty or non-sellable condition; if there is any item/part missing, the cancellation would not be possible. Cancellation freight charges will be applicable as per actual. If cancellation is done from any other floor than the ground floor, any labour charges incurred would be borne by the client.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">INSPECTION OF GOODS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        OPTION 1 - At the warehouse<br />
+        OPTION 2 - On-Site<br />
+        Thorough inspection of the goods is recommended for any damage, missing parts or incomplete deliveries. Client or client's representative is expected to check the material carefully and then sign the bill. We will not be responsible for any of the breakages after the products have been checked & accepted.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">WAREHOUSING CHARGES</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        After 4 weeks from arrival of goods at the our warehouse, demurrage charges of Rs 3000 per week will be applicable.
+    </p>
+    <div style="page-break-before:always"></div>
+    <div style="font-weight: 100; font-size: 17pt;" class="normalLineHeight">TERMS & CONDITIONS</div>
+    <br />
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">SERVICES</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Kindly note that we provide only plumbing assistance and do not undertake any contract for installation of the products.<br />
+        Three plumbing assistance visits will be free of cost.<br />
+        All subsequent visits of the plumber will be on chargeable basis. The client shall be charged Rs.500 per visit along with charges for any consumables.<br />
+        In the case of whirlpool / sauna / steam / under floor heating - outstation visits & assistance will be at chargeable basis.
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">SERVICES CONTACT PERSON & DETAILS (Head Office)</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        For any plumbing complaints you may contact Ms Aakanksha Bhatia on the given numbers:<br />
+        Mobile: 8130795041 / Landline: 26800482/492<br />
+        Timing: 10 am to 7 pm.<br />
+        Email: aakankshabhatia@fcmlindia.com<br />
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DISPATCH CONTACT PERSON & DETAILS (Head Office)</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        For any dispatch queries you may contact Mr Ramesh Jha / Mr Deepak Saini on the given numbers:<br />
+        Mobile: 8130795079/8130795033 / Landline: 26800482/492<br />
+        Timing: 10 am to 7 pm.<br />
+        Email: sultanpur@fcmlindia.com<br />
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">SERVICES CONTACT PERSON & DETAILS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        {{ServicesDetails}}
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">DISPATCH CONTACT PERSON & DETAILS</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        {{DispatchDetails}}
+    </p>
+    <div style="page-break-before:always"></div>
+    <div style="font-weight: 100; font-size: 17pt;" class="normalLineHeight">TERMS & CONDITIONS</div>
+    <br />
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">RTGS INFORMATION</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        <table border="0" cellspacing="0" cellpadding="0">
+            {{RTGSInformation}}
+        </table>
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">ADDRESS INFORMATION</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        {{CompanyAddress}}
+    </p>
+    <div style="font-weight: 400; font-size: 9.6pt;" class="normalLineHeight">ORDER CONFIRMATION FORM</div>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Billing Address:<br />
+        Shipping Address:<br />
+        GST NO:<br />
+        PAN No:<br />
+        Delivery Date:<br />
+    </p>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        Force Majeure: if at any time, any obligation of {{FirmName}}, in whole or in part, is prevented or delayed by reason of
+        any events such as acts of God, war, civil commotion, sabotage, strikes, lockouts, terrorism, earthquakes,
+        hurricanes, acts of government, explosions, damage by fire, plagues or epidemics etc. then the obligation of
+        {{FirmName}} shall stands suspended till such event has come to an end or ceased to exist and no claim or damages, financial
+        or otherwise, (direct or indirect) shall be applicable against {{FirmName}} in this regard.
+    </p>
+    <p style="font-weight: 300; font-size: 9.6pt;" class="normalLineHeight">
+        The parties hereto agree that any matter or issues arising or any dispute arising shall be subject to exclusive
+        jurisdiction of the courts situated at {{CompanyCityName}}
+    </p>
+    <!--Terms & Condition end-->
+    <!--Thankyou page-->
+    <div style="page-break-before:always">&nbsp;</div>
+    <table style="width: 100%; margin-top:200px;" border="0" cellspacing="0" cellpadding="2">
+        <thead>
+            <tr>
+                <th style="font-weight: 100; font-size: 49pt; color:#1f3870">Thank you</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>

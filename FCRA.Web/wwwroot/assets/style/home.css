@@ -1,0 +1,302 @@
+.bg-wrapper{
+    min-height: calc(100vh);
+    background-image: url(../images/risk-mgmt-banner-bg.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+}
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(245, 245, 245, 0.2);
+    z-index: 99;
+}
+.header{
+    background-color: rgba(255, 255, 255);
+    border-radius: 30px;
+    margin-top: 5px;
+    padding: 2px;
+}
+.header .navbar-brand{
+    display: inline-block;
+}
+.header .navbar-brand img{
+    width: 120px;
+}
+.header ul li.user-info{
+
+}
+.header ul li a.user-info-name{
+    font-size: 14px;
+    font-weight: 600;
+    color: #6c6c6c;
+    text-decoration: none;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 18px;
+}
+.header ul li a.user-info-name .user-designation{
+    font-size: 12px;
+    font-weight: 300;
+    color: #0066a5;
+    text-align: right;
+}
+.header ul li a.user-info-name img{
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    vertical-align: baseline;
+}
+.header ul li.user-info .user-info-option{
+    border: none;
+    box-shadow: 2px 3px 4px rgb(0 0 0 / 20%);
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    margin: 50px 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #0066a5;
+    border-radius: 20px;
+}
+
+.side-navigation {
+    width: 60px;
+    position: fixed;
+    background-color: #fff;
+    height: calc(100vh - 80px);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 15px 0;
+    text-align: center;
+    border-radius: 5px;
+    top: 60px;
+    z-index: 99;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+    .side-navigation:hover {
+        width: 350px;
+    }
+
+/* .main-menu {
+    overflow-y: scroll;
+    height: calc(100vh - 111px);
+} */
+
+.main-menu::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+.side-navigation .main-menu ul {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+    .side-navigation .main-menu ul li {
+        margin-bottom: 5px;
+    }
+
+        .side-navigation .main-menu ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        .side-navigation .main-menu ul li a {
+            color: #0066a5;
+            cursor: pointer;
+            position: relative;
+    width: 100%;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease-out;
+}
+
+.side-navigation .main-menu ul li a i, .side-navigation .main-menu ul li a img {
+    position: relative;
+    left: 5px;
+        }
+
+            .side-navigation .main-menu ul li a img {
+                width: 20px;
+            }
+
+            .side-navigation .main-menu ul li a .fas {
+                font-size: 20px;
+            }
+
+            .side-navigation .main-menu ul li a span {
+                display: none;
+            }
+
+            .side-navigation .main-menu ul li a:hover {
+                /* background-color: aliceblue; */
+            }
+
+            .side-navigation .main-menu ul li a.active:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                height: 100%;
+                border-left: 5px solid #ee1b2a;
+            }
+
+            .side-navigation .main-menu ul li a:hover:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                height: 100%;
+                border-left: 5px solid #ee1b2a;
+            }
+
+        .side-navigation .main-menu ul li ul li a.active:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 100%;
+            border-left: none;
+        }
+
+        .side-navigation .main-menu ul li ul li a:hover:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            height: 100%;
+            border-left: none;
+        }
+
+.side-navigation:hover .main-menu ul li a span {
+    display: inline-block;
+    position: relative;
+    left: 7%;
+    /* background: #fff; */
+    padding: 6px 15px 6px 5px;
+    border-radius: 0 15px 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    /* background-color: aliceblue; */
+    width: 80%;
+    text-align: left;
+    /* box-shadow: 9px 4px 10px rgba(0, 0, 0, 0.2); */
+    white-space: nowrap;
+}
+
+.side-navigation .main-menu ul li ul li a {
+    display: none;
+}
+
+.side-navigation:hover .main-menu ul li ul li a {
+    display: block;
+    left: 45px;
+    height: 25px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.side-navigation:hover .main-menu ul.menu li a span i {
+    font-size: 14px;
+    position: relative;
+    top: 7px;
+    float: right !important;
+    margin-right: 7px;
+}
+
+.side-navigation:hover .main-menu ul li ul li a i {
+    font-size: 12px;
+    margin-right: 15px;
+}
+
+.side-navigation:hover .main-menu ul li ul li a.active {
+    color: #ee1b2a;
+}
+
+.side-navigation .main-menu ul li a:hover {
+    text-decoration: none;
+}
+.main-wrapper{
+    padding: 75px 15px 15px 75px;
+}
+.chart-area-title{
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    align-items: center;
+  }
+
+table.custom-table thead tr{
+    background-color: #016ebd;
+    color: #fff;
+}
+table.custom-table thead tr th{
+    white-space: nowrap;
+}
+table.custom-table tfoot tr{
+    background-color: #fcf6df;
+}
+.form-label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    font-size: 14px;
+    color: #012338;
+}
+.mend{
+    position: relative;
+}
+.mend:after{
+    position: absolute;
+    content: "*";
+    color: #ee1b2a;
+    font-size: 16px;
+    font-weight: 700;
+    top: -4px;
+    right: -10px;
+}
+.form-control, .form-select{
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    border: 1px solid #dadada;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #0066a5;
+    border-color: #0066a5;
+}
+.mt-24{
+    margin-top: 24px;
+}
+
+.more-option{
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+.more-option:hover{
+    cursor: pointer;
+    text-decoration: none;
+}
+.more-option img{
+    width: 16px;
+}
+.form-check-input{
+    background-color: #bfbfbf;
+    border-color: #6c6c6c;
+}
+.form-check-input:checked {
+    background-color: #0066a5;
+    border-color: #0066a5;
+}

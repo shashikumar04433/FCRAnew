@@ -1,0 +1,36 @@
+﻿@using FCRA.Common;
+@model List<DataAuditTrailViewModel>
+@{
+    var iIndex = 0;
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+<table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblDataAudittrail">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Class Name</th>
+            <th>Field Name</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Modified By</th>
+            <th>Modified On</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            iIndex += 1;
+            <tr>
+                <td>@iIndex</td>
+                <td>@item.ClassName</td>
+                <td>@item.DataObject</td>
+                <td>@item.OldValue</td>
+                <td>@item.NewValue</td>
+                <td>@item.CreatedByName</td>
+                <td>@item.LastActionOnStr</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,42 @@
+﻿@using System.Data;
+@model DataSet
+@{
+    var iIndex = 0;
+}
+
+
+
+<table id="example" class="table table-sm table-hover table-striped mb-0 custom-table datatable tblApprovalStatus" style="width:100%">
+    <thead>
+        <tr>
+            <th data-orderable="false">Sl. No.</th>
+            <th>Stage</th>
+            <th>Risk Type</th>
+            <th>Geographic Presence</th>
+            <th>Business Segment</th>
+            <th>Sub Unit</th>
+            <th>Reviewer/Approver Name</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (DataRow item in Model.Tables[0].Rows)
+            {
+                iIndex += 1;
+                <tr>
+                    <td>@iIndex</td>
+                    <td> @item["Stage"]</td>
+                    <td> @item["RiskType"]</td>
+                    <td> @item["Country"]</td>
+                    <td> @item["Business"]</td>
+                    <td> @item["SubUnit"]</td>
+                    <td> @item["ApprovedBy"]</td>
+                    <td> @item["PendingFrom"]</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

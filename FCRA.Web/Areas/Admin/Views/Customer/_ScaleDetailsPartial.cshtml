@@ -1,0 +1,36 @@
+﻿@model CustomerViewModel
+@if (Model != null && Model.Scales.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Scale Type</th>
+                <th>Rank</th>
+                <th>Default Name</th>
+                <th>Custom Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Scales.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="Scales[i].CustomerId" type="hidden" class="id" />
+                        <input asp-for="Scales[i].ScaleId" type="hidden" class="id" />
+                        @Model.Scales[i].DefaultScale?.ScaleType.GetDisplayName()
+                    </td>
+                    <td>
+                        @Model.Scales[i].DefaultScale?.RankType
+                    </td>
+                    <td>
+                        @Model.Scales[i].DefaultScale?.Name
+                    </td>
+                    <td>
+                        <input asp-for="Scales[i].Name" placeholder="Enter Custom Name" />
+                        <span asp-validation-for="Scales[i].Name" class="text-danger"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

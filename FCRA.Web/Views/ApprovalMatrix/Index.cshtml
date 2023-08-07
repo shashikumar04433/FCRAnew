@@ -1,0 +1,174 @@
+﻿@using FCRA.Common;
+@model ApprovalMatrixViewModel
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = "Approval Matrix";
+}
+@section ExtraCss{
+    <style>
+        .sortableApprover {
+            list-style: none;
+            padding-left: 0px;
+        }
+
+            .sortableApprover li {
+                cursor: pointer;
+                width: 100%;
+                clear: both;
+                border-bottom: 2px solid #41417c;
+                padding-bottom: 3px;
+                padding-top: 3px;
+            }
+
+                .sortableApprover li button, .card .card-header button {
+                    padding-bottom: 0px !important;
+                    padding-top: 0px !important;
+                }
+
+        .gu-mirror {
+            position: fixed !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+            opacity: .8
+        }
+
+        .gu-hide {
+            display: none !important
+        }
+
+        .gu-unselectable {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important
+        }
+
+        .gu-transit {
+            opacity: .2
+        }
+
+        .draggable {
+            cursor: grab;
+        }
+
+        .gu-unselectable .draggable {
+            cursor: grabbing;
+        }
+    </style>
+}
+
+<h2 class="chart-area-title">
+    @ViewData["Title"]
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="StageId"></label>
+                <select asp-for="StageId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.StageId != null)
+                    {
+                        foreach (var item in (List<StageViewModel>)ViewBag.StageId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="StageId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="RiskTypeId"></label>
+                <select asp-for="RiskTypeId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.RiskTypeId != null)
+                    {
+                        foreach (var item in (List<RiskTypeViewModel>)ViewBag.RiskTypeId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="RiskTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="GeographicPresenceId"></label>
+                <select asp-for="GeographicPresenceId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.GeographicPresenceId != null)
+                    {
+                        foreach (var item in (List<GeographicPresenceViewModel>)ViewBag.GeographicPresenceId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.CountryName</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="GeographicPresenceId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="CustomerSegmentId"></label>
+                <select asp-for="CustomerSegmentId" class="form-select">
+                    <option value="">--Select--</option>
+                    @if (ViewBag.CustomerSegmentId != null)
+                    {
+                        foreach (var item in (List<CustomerSegmentViewModel>)ViewBag.CustomerSegmentId)
+                        {
+                            <option value="@item.Id" data-ex="@item.ExcludeChildCategory.ToString().ToLower()">@item.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="CustomerSegmentId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="BusinessSegmentId"></label>
+                <select asp-for="BusinessSegmentId" asp-items="@ViewBag.BusinessSegmentId" class="form-select"></select>
+                <span asp-validation-for="BusinessSegmentId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4" style="margin-top:25px;">
+                <button type="button" id="btnSearchApprovalMatrix" class="btn btn-primary ps-4 pe-4"><i class="fas fa-save me-2"></i> Search </button>
+            </div>
+        </div>
+        <div class="col-12 mt-1" id="divPermissionsContainer"></div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="divRoleModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select User</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">User</label>
+                    <select asp-for="UserId" class="form-select">
+                        <option value="">--Select--</option>
+                        @if (ViewBag.ApproverUserList != null)
+                        {
+                            foreach (var item in (List<UserViewModel>)ViewBag.ApproverUserList)
+                            {
+                                <option value="@item.Id">@item.Role?.Name, @item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAddRoleMoreUser">Add</button>
+                <button type="button" class="btn btn-primary" id="btnAddRoleUser">Add & Close</button>
+                <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="@Url.Action("AdminRiskFactor","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("AdminRolePermissions","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/admin/masters/approvalmatrix-index.js"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="~/lib/draggable.min.js"></script>
+                }

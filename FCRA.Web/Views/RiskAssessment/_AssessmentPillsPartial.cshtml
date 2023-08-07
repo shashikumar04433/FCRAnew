@@ -1,0 +1,453 @@
+﻿@using FCRA;
+@using FCRA.Common;
+@model FCRA.ViewModels.AssessmentPillsViewModel
+@{
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    ViewData["Title"] = "Assessment Parameter";
+    int iIndex = 0;
+    int iRowIndex = 0;
+    int usertype = 0;
+    if (ViewBag.UserType != null)
+    {
+        usertype = (int)ViewBag.UserType;
+    }
+
+    List<RegisterCompletionViewModel> list = new();
+    var createVersion = true;
+    if (ViewBag.RegisterCompletion != null)
+    {
+        list = (List<RegisterCompletionViewModel>)ViewBag.RegisterCompletion;
+        foreach (var item in list)
+        {
+            if (item.TotalPercentage < 100)
+            {
+                createVersion = false;
+            }
+        }
+    }
+    var isAttachmentApplicable = false;
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <input type="hidden" id="StageId" value="@Model?.Stage?.Id" />
+        <input type="hidden" id="RiskTypeId" value="@Model.RiskType?.Id" />
+        <input type="hidden" id="GeographicPresenceId" value="@Model.GeographicPresence?.Id" />
+        <input type="hidden" id="CustomerSegmentId" value="@Model.CustomerSegment?.Id" />
+        <input type="hidden" id="BusinessSegmentId" value="@Model.BusinessSegment?.Id" />
+        <input type="hidden" id="hdcreateVersion" value="@createVersion.ToString()" />
+        <h6>
+            @Model.Stage?.Name @(Model.RiskType != null ? $" > {Model.RiskType?.Name}" : "") @(Model.GeographicPresence != null ? $" > {Model.GeographicPresence?.Country?.Name}" : "") @(Model.CustomerSegment != null ? $" > {Model.CustomerSegment?.Name}" : "") @(Model.BusinessSegment != null ? $" > {Model.BusinessSegment?.Name}" : "")
+        </h6>
+        @if (Model.RiskFactors.Any() && Model.RiskSubFactors.Any())
+        {
+            <div class="float-end btnPillsExcelContainer">
+                <a asp-area="" asp-controller="RiskAssessment" asp-action="D"
+               asp-route-s="@Model?.Stage?.Id.Encrypt()"
+               asp-route-t="@Model?.RiskType?.Id.Encrypt()"
+               asp-route-g="@Model?.GeographicPresence?.Id.Encrypt()"
+               asp-route-c="@Model?.CustomerSegment?.Id.Encrypt()"
+               asp-route-b="@Model?.BusinessSegment?.Id.Encrypt()"
+                   target="_blank" class="btn btn-outline-secondary mt-3 text-decoration-none" title="Download Template"><i class="fas fa-file-excel text-info"></i> Download Data Template</a>
+                <input asp-for="File" id="fileExcelFileUpload" class="custom-file-input d-none" placeholder="Select File" />
+                <button class="btn btn-outline-secondary mt-3" type="button" onclick="getElementById('fileExcelFileUpload').click()">Select File</button>
+                <button class="btn btn-outline-secondary mt-3" type="button" id="btnUploadExcelFile">Upload Data Template</button>
+                <a asp-area="" asp-controller="RiskAssessment" asp-action="D"
+               asp-route-s="@Model?.Stage?.Id.Encrypt()"
+               asp-route-t="@Model?.RiskType?.Id.Encrypt()"
+               asp-route-g="@Model?.GeographicPresence?.Id.Encrypt()"
+               asp-route-c="@Model?.CustomerSegment?.Id.Encrypt()"
+               asp-route-b="@Model?.BusinessSegment?.Id.Encrypt()"
+                   target="_blank" class="btn btn-outline-secondary mt-3 text-decoration-none" title="Download Template"><i class="fas fa-file-excel text-info"></i> Download Risk Register</a>
+            </div>
+        }
+    </div>
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @foreach (var factor in Model.RiskFactors)
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link @(iIndex==0? "active":"")" id="home-tab-@(factor.Id)" data-bs-toggle="tab" data-bs-target="#home-tab-pane-@(factor.Id)" type="button" role="tab" aria-controls="home-tab-pane@(factor.Id)" aria-selected="true">@factor.Name</button>
+                </li>
+                iIndex += 1;
+            }
+        </ul>
+        @{
+            iIndex = 0;
+        }
+        <div class="tab-content" id="myTabContent">
+            @foreach (var factor in Model.RiskFactors)
+            {
+                isAttachmentApplicable = false;
+                foreach (var item in Model.RiskSubFactors.Where(t => t.RiskFactorId == factor.Id))
+                {
+                    if (item.isAttachmentApplicable)
+                    {
+                        isAttachmentApplicable = true;
+                    }
+                }
+                var criteria = FCRA.ViewModels.AssessmentPillsViewModel.GetAssesmentModel(Model, factor.Id);
+                iRowIndex = 1;
+                <div class="tab-pane fade @(iIndex==0? "show active":"")" id="home-tab-pane-@(factor.Id)" role="tabpanel" aria-labelledby="home-tab-@(factor.Id)" tabindex="0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sl. No.</th>
+                                <th>Sub Factor</th>
+                                <th>Description</th>
+                                <th>Risk Weightage</th>
+                                <th>Response</th>
+                                <th>Risk Score</th>
+                                <th>Weighted Score</th>
+                                <th>Comments</th>
+                                @if (isAttachmentApplicable)
+                                {
+                                    <th>Attachment</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var subFactor in Model.RiskSubFactors.Where(t => t.RiskFactorId == factor.Id))
+                            {
+                                var subFactorCriterias = FCRA.ViewModels.AssessmentPillsViewModel.GetAssesmentModel(Model, factor.Id, subFactor.Id);
+
+                                <tr class="@(subFactorCriterias.RiskCriteriaMappings.Any()?"trDisabled":"")" style="vertical-align:middle" data-factorid="@factor.Id" data-subfactorid="@subFactor.Id" data-riskrangeparameter="@((int)subFactor.RiskRangeParameter)" data-isAttachmentMandatory="@subFactor.isAttachmentMandatory" data-attachmentCount ="@subFactor.riskSubFactorAttachment.Count" data-SubfactorName ="@subFactor.Name">
+                                    <td align="right">@iRowIndex</td>
+                                    <td>@subFactor.Name</td>
+                                    <td>@subFactor.Description</td>
+                                    @if (subFactor.IsExcludedInRisk)
+                                    {
+                                        <td align="center">NA</td>
+                                        <td align="center">NA</td>
+                                        <td align="center">NA</td>
+                                        <td align="center">NA</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@subFactor.RiskWeightage%</td>
+                                        @if (factor.RiskRangeParameter == RiskRangeParameter.PercentRange)
+                                        {
+                                            <td>
+                                                <input asp-for="@subFactor.Response" class="form-control riskWeightage" type="number" placeholder="Response" data-s2="@subFactor.Percentage2"
+                                                       data-s3="@subFactor.Percentage3" data-s4="@subFactor.Percentage4"
+                                                       data-s5="@subFactor.Percentage5" max="100" min="0" />
+                                            </td>
+                                        }
+                                        else if (factor.RiskRangeParameter == RiskRangeParameter.PreDefinedParameters)
+                                        {
+                                            <td>
+                                                <select asp-for="@subFactor.PreDefinedParameterId" class="form-select riskWeightageSelect riskWeightageSelectPre">
+                                                    <option value="" data-rating="0">--Select--</option>
+                                                    <option value="@subFactor.PreDefinedParameter1Id" data-rating="1">@subFactor.PreDefinedRiskParameter1?.Name</option>
+                                                    <option value="@subFactor.PreDefinedParameter2Id" data-rating="2">@subFactor.PreDefinedRiskParameter2?.Name</option>
+                                                    <option value="@subFactor.PreDefinedParameter3Id" data-rating="3">@subFactor.PreDefinedRiskParameter3?.Name</option>
+                                                    @if (scaleType == ScaleType.FourPoint || scaleType == ScaleType.FivePoint)
+                                                    {
+                                                        <option value="@subFactor.PreDefinedParameter4Id" data-rating="4">@subFactor.PreDefinedRiskParameter4?.Name</option>
+                                                        @if (scaleType == ScaleType.FivePoint)
+                                                        {
+                                                            <option value="@subFactor.PreDefinedParameter5Id" data-rating="5">@subFactor.PreDefinedRiskParameter5?.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                        }
+                                        else if (factor.RiskRangeParameter == RiskRangeParameter.Descriptive)
+                                        {
+                                            <td>
+                                                <select asp-for="@subFactor.ResponseDescription" class="form-select riskWeightageSelect riskWeightageSelectDescription">
+                                                    <option value="" data-rating="0">--Select--</option>
+                                                    <option value="@subFactor.RiskDescription1" data-rating="1">@subFactor.RiskDescription1</option>
+                                                    <option value="@subFactor.RiskDescription2" data-rating="2">@subFactor.RiskDescription2</option>
+                                                    <option value="@subFactor.RiskDescription3" data-rating="3">@subFactor.RiskDescription3</option>
+                                                    @if (scaleType == ScaleType.FourPoint || scaleType == ScaleType.FivePoint)
+                                                    {
+                                                        <option value="@subFactor.RiskDescription4" data-rating="4">@subFactor.RiskDescription4</option>
+                                                        @if (scaleType == ScaleType.FivePoint)
+                                                        {
+                                                            <option value="@subFactor.RiskDescription5" data-rating="5">@subFactor.RiskDescription5</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                        }
+                                        else if (factor.RiskRangeParameter == RiskRangeParameter.Volume)
+                                        {
+                                            <td>
+                                                <input asp-for="@subFactor.Response" class="form-control riskWeightage" type="number" placeholder="Response" data-s1="@subFactor.RiskVolume1"
+                                                       data-s2="@subFactor.RiskVolume2" data-s3="@subFactor.RiskVolume3" data-s4="@subFactor.RiskVolume4"
+                                                       data-s5="@subFactor.RiskVolume5" max="100" min="0" readonly="readonly" />
+                                            </td>
+                                        }
+                                        else if (factor.RiskRangeParameter == RiskRangeParameter.Scale)
+                                        {
+                                            <td>
+                                                <select asp-for="@subFactor.Response" class="form-select riskWeightageSelect riskWeightageSelectScale">
+                                                    <option value="" data-rating="0">--Select--</option>
+                                                    @if (scaleType == ScaleType.ThreePoint)
+                                                    {
+                                                        <option value="1" data-rating="1">Adequate</option>
+                                                        <option value="2" data-rating="2">Needs Improvement</option>
+                                                        <option value="3" data-rating="3">Weak</option>
+                                                    }
+                                                    else if (scaleType == ScaleType.FourPoint)
+                                                    {
+                                                        <option value="1" data-rating="1">Strong</option>
+                                                        <option value="2" data-rating="2">Adequate</option>
+                                                        <option value="3" data-rating="3">Needs Improvement</option>
+                                                        <option value="4" data-rating="4">Weak</option>
+                                                    }
+                                                    else if (scaleType == ScaleType.FivePoint)
+                                                    {
+                                                        <option value="1" data-rating="1">Strong</option>
+                                                        <option value="2" data-rating="2">Adequate</option>
+                                                        <option value="3" data-rating="3">Needs Improvement</option>
+                                                        <option value="4" data-rating="4">Weak</option>
+                                                        <option value="5" data-rating="5">Absent</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                        }
+
+                                        @if (subFactor.Score.HasValue)
+                                        {
+                                            <td class="riskScore" align="center" valign="middle">@subFactor.Score.Value</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="riskScore" align="center" valign="middle">-</td>
+                                        }
+                                        <td class="riskWeightedScore" data-weightedpercent="@subFactor.RiskWeightage">@(subFactor.Score.HasValue ? (subFactor.RiskWeightage * subFactor.Score.Value).ToTwoDecimal() : "")</td>
+                                        <td>
+                                            <textarea asp-for="@subFactor.Assumptions" cols="50" rows="2" class="form-control txtAssumptions" placeholder="Comments"></textarea>
+                                        </td>
+                                        @if (subFactor.Id > 0 && isAttachmentApplicable)
+                                        {
+                                            <td data-subfactorid="@subFactor.Id">
+                                                @if (subFactor.isAttachmentApplicable)
+                                                {
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm btnChangeImageCustom" title="Select File">Select File</button>
+                                                    @if (subFactor?.riskSubFactorAttachment.Count > 0)
+                                                    {
+                                                        foreach (var item in subFactor?.riskSubFactorAttachment)
+                                                        {
+                                                            <br />
+                                                            <a href="@Url.Action("DownloadFile","Home",new{area=""})?p=@Html.UrlEncoder.Encode(item.FilePath!)&fn=@Html.UrlEncoder.Encode(item.FileName!)" class="download" target="_blank">@item.FileName</a>
+
+                                                        }
+
+                                                    }
+                                                }
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                                @if (subFactorCriterias.RiskCriteriaMappings.Any())
+                                {
+                                    <tr>
+                                        <td colspan="8">
+                                            <partial name="_RiskCriteriaPillsPartial.cshtml" model="subFactorCriterias" />
+                                        </td>
+                                    </tr>
+                                }
+                                @if (factor.RiskRangeParameter == RiskRangeParameter.Volume)
+                                {
+                                    var volume = Model.VolumeMappings.Where(t => t.RiskFactorId == subFactor.RiskFactorId && t.RiskSubFactorId == subFactor.Id).FirstOrDefault();
+                                    if (volume != null)
+                                    {
+                                        <tr>
+                                            <td colspan="8">
+                                                <partial name="_VolumePartial.cshtml" model="volume" />
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                iRowIndex += 1;
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-end" colspan="6">Total Weighted Score</th>
+                                <th class="text-end factorTotalWeightedScore" data-factorid="@factor.Id" data-totalweightedscore="@factor.TotalWeightedScore">@factor.TotalWeightedScore.ToTwoDecimal()</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+                iIndex += 1;
+            }
+        </div>
+        @if (Model.RiskFactors.Any() && Model.RiskSubFactors.Any())
+        {
+            if (Model.ApprovalRequests.Any() && ViewBag.CurrentUser == Model.ApprovalRequests[0].PendingWithUser)
+            {
+                <div class="card-footer text-end">
+                    <button type="button" class="btn btn-primary ps-4 pe-4" id="btnApproveSubmit" value="1"><i class="fas fa-save me-2"></i> Approve</button>
+                    <button type="button" class="btn btn-primary ps-4 pe-4" id="btnApproveCancel" value="0"><i class="fas fa-save me-2"></i> Reject</button>
+                </div>
+            }
+            else if (usertype == 3 && (!Model.ApprovalRequests.Any() || (Model.ApprovalRequests.Any() && (Model.ApprovalRequests[0].FinalStatus == 0 || Model.ApprovalRequests[0].FinalStatus == 5))))
+            {
+                <div class="card-footer text-end">
+                    <button type="button" class="btn btn-outline-secondary ps-4 pe-4" id="btnSendEmailNotificationShow"><i class="fas fa-envelope text-info me-2"></i></button>
+                    <button type="button" class="btn btn-primary ps-4 pe-4" id="btnSaveResponse"><i class="fas fa-save me-2"></i> Save</button>
+                    <button type="button" class="btn btn-primary ps-4 pe-4" id="btnSubmitResponse" value="2"><i class="fas fa-save me-2"></i> Submit</button>
+                    <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail">Audit Trail</button>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="modal fade" id="divAddQuestionModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblSelectedQuestions">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Purpose of the question</th>
+                            <th>Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAddQuestion" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divCountriesVolumeModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Questionnaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Country</th>
+                            <th>Risk Rating</th>
+                            <th style="width:150px;">Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnCountriesVolumeModal" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divSendEmailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-none" id="divEmailContent">mailto:{{email}}?subject=FCRA-Review%20Action&body=Dear%20{{name}}%2C%20%0A%0A{{username}}%20%20has%20assigned%20an%20action%20for%20you%20under%20the%20Financial%20Crime%20Risk%20Assessment%20(FCRA)%20exercise.%20Request%20you%20to%20complete%20the%20assigned%20action%20by%20{{date}}.%0A%0ATo%20view%20task%2C%20please%20login%20on%20https%3A%2F%2Ffcraportal.azurewebsites.net%2F%0A%0A</div>
+                <div class="d-none" id="divSMTPEmailContent"><p>Dear {{name}},</p><p>{{username}} has assigned an action for you under the Financial Crime Risk Assessment (FCRA) exercise. Request you to complete the assigned action by {{date}}.</p><p>To view task, please login on https://fcraportal.azurewebsites.net/</p></div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="form-label" for="ddlUsers">Reviewers / Approvers</label>
+                        <select id="ddlUsers" aria-required="true" class="select2 form-select active" style="width:100%">
+                            <option value="">--Select--</option>
+                            @if (Model.UserViewModels != null)
+                            {
+                                foreach (var item in Model.UserViewModels)
+                                {
+                                    <option value="@item.Email">@item.Name</option>
+                                }
+                            }
+                            <option value="nipun.s@protivitiglobal.me">Nipun Srivastava</option>
+                            <option value="anand.sharma@protivitiglobal.me">Anand Sharma</option>
+                            <option value="harshit.sinha@protivitiglobal.me">Harshit Sinha</option>
+                            <option value="rajat.dhir@protivitiglobal.in">Rajat Dhir</option>
+                            <option value="sachchida.jha@protivitiglobal.in">Sachchidanand Jha</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="xxx" id="aSendNotification" class="d-none"></a>
+                <input type="hidden" id="hdEmailTaskDate" value="@DateTime.Now.AddDays(5).ToString("dd'/'MM'/'yyyy")" />
+                @if (ViewBag.IsThroughSMTP != null)
+                {
+                    <input type="hidden" id="hdIsThroughSMTP" value="@ViewBag.IsThroughSMTP">
+                }
+                <button type="button" id="btnSendemail" class="btn btn-primary d-none"><i class="fas fa-envelope me-2"></i>Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divChangeRiskSubFactorFileModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add File
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-0">
+                            <label for="fileCustomModal"></label>
+                            <div class="custom-file">
+                                <input id="fileCustomModal" type="file" multiple class="custom-file-input riskSubFactorFile" placeholder="Select File" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="hdSubfactorIdModal" />
+                <button type="button" id="btnChangeSubFactorFileModal" class="btn btn-primary">Save</button>
+                <input type="hidden" id="hdUserType" value="@usertype" />
+                @if (Model.ApprovalRequests.Any())
+                {
+                    <input type="hidden" id="hdApprovalStatus" value="@Model.ApprovalRequests[0].Status" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

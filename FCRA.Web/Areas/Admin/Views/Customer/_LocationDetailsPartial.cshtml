@@ -1,0 +1,61 @@
+﻿@model CustomerViewModel
+@if (Model != null && Model.Locations.Count > 0)
+{
+    for (var i = 0; i < Model.Locations.Count; i++)
+    {
+
+        <div class="row mb-2 border-bottom location-item">
+            <div class="col-12">
+                Location Details <span class="spCount">@(i + 1)</span>
+                <input asp-for="Locations[i].LocationId" type="hidden" class="id" />
+                <input asp-for="Locations[i].CustomerId" type="hidden" class="id" />
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <label asp-for="Locations[i].CountryId"></label>
+                <select asp-for="Locations[i].CountryId" asp-items="ViewBag.CountryId" class="form-select"></select>
+                <span asp-validation-for="Locations[i].CountryId" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="field">
+                    <label asp-for="Locations[i].LocationName"></label>
+                    <input asp-for="Locations[i].LocationName" placeholder="Enter Location Name" />
+                    <span asp-validation-for="Locations[i].LocationName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="field">
+                    <label asp-for="Locations[i].Address1"></label>
+                    <input asp-for="Locations[i].Address1" aria-required="true" placeholder="Enter Address 1" />
+                    <span asp-validation-for="Locations[i].Address1" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="field">
+                    <label asp-for="Locations[i].Address2"></label>
+                    <input asp-for="Locations[i].Address2" aria-required="true" placeholder="Enter Address 2" />
+                    <span asp-validation-for="Locations[i].Address2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="field">
+                    <label asp-for="Locations[i].Address3"></label>
+                    <input asp-for="Locations[i].Address3" aria-required="true" placeholder="Enter Address 3" />
+                    <span asp-validation-for="Locations[i].Address3" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="field">
+                    <label asp-for="Locations[i].Address4"></label>
+                    <input asp-for="Locations[i].Address4" aria-required="true" placeholder="Enter Address 4" />
+                    <span asp-validation-for="Locations[i].Address4" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 @(Model.Locations[i].LocationId>0?"d-none":"")">
+                <button class="btn btn-danger px-10 mt-1 delete" data-repeater-delete type="button">
+                    <i data-feather="x" class="mr-10"></i><span>Delete</span>
+                </button>
+            </div>
+        </div>
+    }
+
+}

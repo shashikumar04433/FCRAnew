@@ -1,0 +1,114 @@
+﻿@using FCRA.Common;
+@model List<RiskFactorViewModel>
+@{
+    var stages = Model.Select(t => t.Stage).DistinctBy(t => t!.Id).OrderBy(t => t.Sequence).ToList();
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    Dictionary<int, decimal> stageScores = new();
+    List<int> groupList = new();
+    if (ViewBag.Groups != null)
+        groupList = (List<int>)ViewBag.Groups;
+}
+
+@foreach (var stage in stages)
+{
+    var uniqueFactors = Model.Where(t => t.StageId == stage!.Id).Select(t => t.Name).Distinct();
+    var uniqueSegments = Model.Where(t => t.StageId == stage!.Id && t.BusinessSegmentId.HasValue).Select(t => new { Name = t.BusinessSegment!.Name }).Distinct().ToList();
+    <div class="card-header">
+        Risk Assessment Comparison
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="@(3+uniqueSegments.Count)" id="thYear1" class="thYear1" style="background-color: #8b7171;color: #fff;font-size: 16px;"></th>
+                    <th class="clsDivider"></th>
+                    <th colspan="@(3+uniqueSegments.Count)" id="thYear2" class="thYear2" style="background-color: #7a718b;color: #fff;font-size: 16px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-dark text-white">
+                    <th colspan="@(8 + uniqueSegments.Count * 2)">
+                        Risks - @stage.Name
+                    </th>
+                </tr>
+                <tr class="bg-dark text-white">
+                    <th>Risk Category</th>
+                    <th>Category Weights</th>
+                    @foreach (var segment in uniqueSegments)
+                    {
+                        <th>@segment.Name</th>
+                    }
+                    <th>Aggregate Risk Score</th>
+                    <th>Weighted Score</th>
+                    <th class="clsDivider"></th>
+                    <th>Category Weights</th>
+                    @foreach (var segment in uniqueSegments)
+                    {
+                        <th>@segment.Name</th>
+                    }
+                    <th>Aggregate Risk Score</th>
+                    <th>Weighted Score</th>
+                </tr>
+                @{
+                    List<SummaryWeightViewModel> factorList = new();
+                    foreach (var factorName in uniqueFactors)
+                    {
+                        var factorScores = Model.Where(t => t.StageId == stage.Id && t.Name == factorName);
+                        var weigthPercent = 0.00M;
+                        var fromavgScore = 0.00M;
+                        var toavgScore = 0.00M;
+                        if (factorScores.Any())
+                        {
+                            weigthPercent = factorScores.First().WeightPercentage;
+                            fromavgScore = factorScores.Sum(t => t.FromVersionTotalWeightedScore);
+                            toavgScore = factorScores.Sum(t => t.ToVersionTotalWeightedScore);
+                        }
+                        factorList.Add(new()
+                    {
+                        Category = factorName,
+                        WeightPercentage = weigthPercent,
+                        WeightedScore = fromavgScore,
+                        toWeightedScore = toavgScore
+                    });
+                    }
+                }
+                @foreach (var factor in factorList)
+                {
+                    var fromweightedScore = factor.WeightedScore * factor.WeightPercentage / 100;
+                    var toweightedScore = factor.toWeightedScore * factor.WeightPercentage / 100;
+                    <tr>
+                        <td align="left">@factor.Category</td>
+                        <td>@factor.WeightPercentage</td>
+                        @foreach (var segment in uniqueSegments)
+                        {
+                            var segmentScore = 0.00M;
+                            if (Model.Any(t => t.StageId == stage.Id && t.Name == factor.Category && t.BusinessSegmentId.HasValue && t.BusinessSegment!.Name == segment.Name))
+                            {
+                                segmentScore = Model.Where(t => t.StageId == stage.Id && t.Name == factor.Category && t.BusinessSegmentId.HasValue && t.BusinessSegment!.Name == segment.Name).Average(t => t.TotalWeightedScore);
+                            }
+                            <td>@segmentScore.ToTwoDecimal()</td>
+                        }
+                        <td class="riskScore2">@factor.WeightedScore.ToTwoDecimal()</td>
+                        <td>@fromweightedScore.ToTwoDecimal()</td>
+                        <th class="clsDivider"></th>
+                        <td>@factor.WeightPercentage</td>
+                        @foreach (var segment in uniqueSegments)
+                        {
+                            var segmentScore = 0.00M;
+                            if (Model.Any(t => t.StageId == stage.Id && t.Name == factor.Category && t.BusinessSegmentId.HasValue && t.BusinessSegment!.Name == segment.Name))
+                            {
+                                segmentScore = Model.Where(t => t.StageId == stage.Id && t.Name == factor.Category && t.BusinessSegmentId.HasValue && t.BusinessSegment!.Name == segment.Name).Average(t => t.TotalWeightedScore);
+                            }
+                            <td>@segmentScore.ToTwoDecimal()</td>
+                        }
+                        <td class="riskScore2">@factor.toWeightedScore.ToTwoDecimal()</td>
+                        <td>@toweightedScore.ToTwoDecimal()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

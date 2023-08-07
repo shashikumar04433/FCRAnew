@@ -1,0 +1,183 @@
+﻿@using FCRA.Common;
+@model List<RiskFactorViewModel>
+@{
+    var stages = Model.Select(t => t.Stage).DistinctBy(t => t!.Id).OrderBy(t => t.Sequence).ToList();
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    Dictionary<int, decimal> stageScores = new();
+    List<int> groupList = new();
+    if (ViewBag.Groups != null)
+        groupList = (List<int>)ViewBag.Groups;
+}
+
+@foreach (var stage in stages)
+{
+    var uniqueFactors = Model.Where(t => t.StageId == stage!.Id).Select(t => t.Name).Distinct();
+    var uniqueCustomerSegments = Model.Where(t => t.StageId == stage!.Id && t.CustomerSegmentId.HasValue).Select(t => new { Name = t.CustomerSegment!.Name }).Distinct().ToList();
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            Overview of Risk Assessment Results
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-dark text-white" colspan="6">@stage!.Name</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Risk Category</th>
+                                            <th>Category Weights</th>
+                                            @foreach (var segment in uniqueCustomerSegments)
+                                            {
+                                                <th>@segment.Name</th>
+                                            }
+                                            <th>Aggregate Risk Score</th>
+                                            <th>Weighted Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var totalWeightedScoreIR = 0.00M;
+                                            var irRating = 1;
+                                            List<SummaryWeightViewModel> factorList = new();
+                                            var totalScore = 0.00M;
+                                            foreach (var factorName in uniqueFactors)
+                                            {
+                                                var factorScores = Model.Where(t => t.StageId == stage.Id && t.Name == factorName);
+                                                var weigthPercent = 0.00M;
+                                                var avgScore = 0.00M;
+                                                if (factorScores.Any())
+                                                {
+                                                    weigthPercent = factorScores.First().WeightPercentage;
+                                                    avgScore = factorScores.Average(t => t.TotalWeightedScore);
+                                                }
+                                                factorList.Add(new()
+                    {
+                        Category = factorName,
+                        WeightPercentage = weigthPercent,
+                        WeightedScore = avgScore
+                    });
+                                            }
+                                            totalScore = factorList.Sum(t => t.WeightedScore);
+                                        }
+
+
+                                        @foreach (var factor in factorList)
+                                        {
+                                            var weightedScore = factor.WeightedScore * factor.WeightPercentage / 100;
+                                            <tr>
+                                                <td align="left">@factor.Category</td>
+                                                <td>@factor.WeightPercentage</td>
+                                                @foreach (var segment in uniqueCustomerSegments)
+                                                {
+                                                    var segmentScore = 0.00M;
+                                                    if (Model.Any(t => t.StageId == stage.Id && t.Name == factor.Category && t.CustomerSegmentId.HasValue && t.CustomerSegment!.Name == segment.Name))
+                                                    {
+                                                        segmentScore = Model.Where(t => t.StageId == stage.Id && t.Name == factor.Category && t.CustomerSegmentId.HasValue && t.CustomerSegment!.Name == segment.Name).Average(t => t.TotalWeightedScore);
+                                                    }
+                                                    <td>@segmentScore.ToTwoDecimal()</td>
+                                                }
+                                                <td class="@Utilitiy.GetRatingCssClass(Utilitiy.GetScoreRating(factor.WeightedScore,stage.ScaleRange2,stage.ScaleRange3,stage.ScaleRange4,stage.ScaleRange5))">@factor.WeightedScore.ToTwoDecimal()</td>
+                                                <td>@weightedScore.ToTwoDecimal()</td>
+                                            </tr>
+                                            totalWeightedScoreIR += weightedScore;
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="@(3+uniqueCustomerSegments.Count)" class="">Aggregate Risk Rating</th>
+                                            <th class=" @Utilitiy.GetRatingCssClass(Utilitiy.GetScoreRating(totalWeightedScoreIR,stage.ScaleRange2,stage.ScaleRange3,stage.ScaleRange4,stage.ScaleRange5))">@totalWeightedScoreIR.ToTwoDecimal()</th>
+                                            @{
+                                                stageScores.TryAdd(stage.Id, totalWeightedScoreIR);
+                                            }
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <partial name="_SumarryRangePartial.cshtml" model="ScaleRangeViewModel.GetScale(stage)" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (stages.Any() && stages.Count > 1 && stageScores.Any() && stageScores.Count > 1)
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-dark text-white" colspan="3">Residual Risk Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var i = 0;
+                                            var totalStageScore = stageScores.Select(t => t.Value).Sum();
+                                            var rating = Utilitiy.GetScoreRating(totalStageScore, stages[0].ScaleRange2, stages[0].ScaleRange3, stages[0].ScaleRange4, stages[0].ScaleRange5);
+                                        }
+                                        @foreach (var stage in stages)
+                                        {
+
+                                            if (stageScores.ContainsKey(stage.Id))
+                                            {
+                                                var stageScore = stageScores.Where(t => t.Key == stage!.Id).FirstOrDefault();
+                                                <tr>
+                                                    <td align="left">Aggregate @stage.Name Risk Rating</td>
+                                                    <td class="@Utilitiy.GetRatingCssClass(Utilitiy.GetScoreRating(stageScore.Value,stage.ScaleRange2,stage.ScaleRange3,stage.ScaleRange4,stage.ScaleRange5))">@stageScore.Value.ToTwoDecimal()</td>
+                                                </tr>
+                                            }
+                                            i += 1;
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Residual AML Risk Rating</th>
+                                            <th class="@Utilitiy.GetRatingCssClass(rating)">
+                                                @Utilitiy.GetRatingText(scaleType, rating)
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <partial name="_RatingMatrixPartial.cshtml" model="scaleType" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (!stages.Any())
+{
+    <div class="card">
+        <div class="card-body">
+            <h3>No rating found!</h3>
+        </div>
+    </div>
+}

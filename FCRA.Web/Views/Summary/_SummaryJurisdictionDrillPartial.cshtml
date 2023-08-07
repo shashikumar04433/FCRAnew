@@ -1,0 +1,120 @@
+﻿@using FCRA.Common;
+@model List<RiskFactorViewModel>
+@{
+    var stages = Model.Select(t => t.Stage).DistinctBy(t => t!.Id).OrderBy(t => t.Sequence).ToList();
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+    Dictionary<int, decimal> stageScores = new();
+    List<int> groupList = new();
+    if (ViewBag.Groups != null)
+        groupList = (List<int>)ViewBag.Groups;
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+}
+@foreach (var stage in stages)
+{
+    var uniqueFactors = Model.Where(t => t.StageId == stage!.Id).Select(t => t.Name).Distinct();
+    var uniqueRiskType = Model.Where(t => t.StageId == stage!.Id && t.RiskTypeId.HasValue).Select(t => new { Name = t.RiskType!.Name }).Distinct().ToList();
+    var uniqueGeographicPresence = Model.Where(t => t.StageId == stage!.Id && t.GeographicPresenceId.HasValue).Select(t => new { Id = t.GeographicPresence!.CountryId, Name = t.GeographicPresence.CountryName, t.GeographicPresence.Sequence }).Distinct().OrderBy(t => t.Sequence).ToList();
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Overview of Risk Assessment Results
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-dark text-white" colspan="@(4+uniqueGeographicPresence.Count+uniqueRiskType.Count)">@stage!.Name</th>
+                                        </tr>
+
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            @foreach (var risk in uniqueRiskType)
+                                            {
+                                                <th colspan="@uniqueGeographicPresence.Count">@risk!.Name</th>
+                                            }
+                                            <th colspan="2"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Risk Category</th>
+                                            <th>Category Weights</th>
+                                            @foreach (var risk in uniqueRiskType)
+                                            {
+                                                @foreach (var geo in uniqueGeographicPresence)
+                                                {
+                                                    <th>@geo.Name</th>
+                                                }
+                                            }
+                                            <th>Aggregate Risk Score</th>
+                                            <th>Weighted Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var totalWeightedScoreIR = 0.00M;
+                                            var irRating = 1;
+                                            List<SummaryWeightViewModel> factorList = new();
+                                            var totalScore = 0.00M;
+                                            foreach (var factorName in uniqueFactors)
+                                            {
+                                                var factorScores = Model.Where(t => t.StageId == stage.Id && t.Name == factorName);
+                                                var weigthPercent = 0.00M;
+                                                var avgScore = 0.00M;
+                                                if (factorScores.Any())
+                                                {
+                                                    weigthPercent = factorScores.First().WeightPercentage;
+                                                    avgScore = factorScores.Average(t => t.TotalWeightedScore);
+                                                }
+                                                factorList.Add(new()
+                    {
+                        Category = factorName,
+                        WeightPercentage = weigthPercent,
+                        WeightedScore = avgScore,
+                        RiskFactorIdList = Model.Where(t => t.StageId == stage!.Id && t.Name == factorName).Select(t => t.Id).ToList()
+                    });
+                                            }
+                                            totalScore = factorList.Sum(t => t.WeightedScore);
+                                        }
+
+
+                                        @foreach (var factor in factorList)
+                                        {
+                                            var weightedScore = factor.WeightedScore * factor.WeightPercentage / 100;
+                                            var factorlist = string.Join(",", factor.RiskFactorIdList!.Select(n => n.ToString()).ToArray());
+                                            <tr>
+                                                <td align="left">@factor.Category</td>
+                                                <td>@factor.WeightPercentage</td>
+                                                @foreach (var risk in uniqueRiskType)
+                                                {
+                                                    @foreach (var geo in uniqueGeographicPresence)
+                                                    {
+                                                        var geoScore = 0.00M;
+                                                        if (Model.Any(t => t.StageId == stage.Id && t.RiskTypeId.HasValue && t.RiskType!.Name == risk.Name && t.Name == factor.Category && t.GeographicPresenceId.HasValue && t.GeographicPresence!.CountryId == geo.Id))
+                                                        {
+                                                            geoScore = Model.Where(t => t.StageId == stage.Id && t.RiskTypeId.HasValue && t.RiskType!.Name == risk.Name && t.Name == factor.Category && t.GeographicPresenceId.HasValue && t.GeographicPresence!.CountryId == geo.Id).Average(t => t.TotalWeightedScore);
+                                                        }
+                                                        <td><a href="#" onclick="loadDrilledData('2,3,4', '@factorlist', @geo.Id)">@geoScore.ToTwoDecimal()</a></td>
+                                                    }
+                                                }
+                                                <td class="@Utilitiy.GetRatingCssClass(Utilitiy.GetScoreRating(factor.WeightedScore,stage.ScaleRange2,stage.ScaleRange3,stage.ScaleRange4,stage.ScaleRange5))">
+                                                    @factor.WeightedScore.ToTwoDecimal()
+                                                </td>
+                                                <td>@weightedScore.ToTwoDecimal()</td>
+                                            </tr>
+                                            totalWeightedScoreIR += weightedScore;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Sector wise summary";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Overview of Risk Assessment Results
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th class="bg-dark text-white" colspan="11">Inherent Risk Assessment</th>
+                            </tr>
+                            <tr>
+                                <th>Risk Category</th>
+                                <th>Category Weights</th>
+                                <th style="width:80px;">FAB</th>
+                                <th style="width:80px;">ENBD</th>
+                                <th style="width:80px;">DIB</th>
+                                <th style="width:80px;">ADCB</th>
+                                <th style="width:80px;">ADIB</th>
+                                <th>Sector/Peer Group Risk Score</th>
+                                <th>Weighted Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            <tr>
+                                <td align="left">Customer Risk</td>
+                                <td>25.00</td>
+                                <td class="riskScore1">2.15</td>
+                                <td class="riskScore2">2.33</td>
+                                <td class="riskScore2">2.20</td>
+                                <td class="riskScore3">2.35</td>
+                                <td class="riskScore2">2.30</td>
+                                <td class="riskScore2">2.28</td>
+                                <td>0.57</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Products &amp; Services Risk</td>
+                                <td>25.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td>0.75</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Geography Risk</td>
+                                <td>20.00</td>
+                                <td class="riskScore2">2.00</td>
+                                <td class="riskScore1">1.60</td>
+                                <td class="riskScore1">1.80</td>
+                                <td class="riskScore1">1.80</td>
+                                <td class="riskScore1">1.80</td>
+                                <td class="riskScore1">1.78</td>
+                                <td>0.36</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Channel Risk</td>
+                                <td>15.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore2">2.75</td>
+                                <td class="riskScore2">2.75</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">3.00</td>
+                                <td class="riskScore3">2.89</td>
+                                <td>0.43</td>
+                            </tr>
+                            <tr>
+                                <td align="left">Qualitative Risk Factors</td>
+                                <td>15.00</td>
+                                <td class="riskScore2">2.25</td>
+                                <td class="riskScore2">2.25</td>
+                                <td class="riskScore2">2.25</td>
+                                <td class="riskScore2">2.25</td>
+                                <td class="riskScore2">2.25</td>
+                                <td class="riskScore2">2.25</td>
+                                <td>0.34</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="8" class="">Aggregate Risk Rating</th>
+                                <th class=" riskScore3">2.45</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-4 offset-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th class="bg-dark text-white" colspan="3">Residual Risk Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="left">FAB</td>
+                                <td class="riskScore3" style="width:100px;">2.48</td>
+                            </tr>
+                            <tr>
+                                <td align="left">ENBD</td>
+                                <td class="riskScore1">1.40</td>
+                            </tr>
+                            <tr>
+                                <td align="left">DIB</td>
+                                <td class="riskScore2">2.41</td>
+                            </tr>
+                            <tr>
+                                <td align="left">ADCB</td>
+                                <td class="riskScore1">1.23</td>
+                            </tr>
+                            <tr>
+                                <td align="left">ADIB</td>
+                                <td class="riskScore2">2.47</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Sector/Peer Group Risk Score</th>
+                                <th class="riskScore3">
+                                    2.45
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

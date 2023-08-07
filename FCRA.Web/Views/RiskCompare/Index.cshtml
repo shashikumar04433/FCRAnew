@@ -1,0 +1,236 @@
+﻿@{
+    ViewData["Title"] = "Comparison";
+}
+<div class="row">
+    <div class="col-lg-4">
+        <label class="form-label">Year 1</label>
+        <select id="ddlYear1" class="form-select">
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+        </select>
+    </div>
+    <div class="col-lg-4">
+        <label class="form-label">Year 2</label>
+        <select id="ddlYear2" class="form-select">
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+        </select>
+    </div>
+    <div class="col-lg-4 mt-3">
+        <button type="button" class="btn btn-primary ps-4 pe-4"><i class="fas fa-search me-2"></i>Search</button>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="card-header">
+        Risk Assessment Comparison
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="3" id="thYear1" style="background-color: #8b7171;color: #fff;font-size: 16px;">2023</th>
+                    <th class="clsDivider"></th>
+                    <th colspan="3" id="thYear2" style="background-color: #7a718b;color: #fff;font-size: 16px;">2022</th>
+                </tr>               
+            </thead>
+            <tbody>
+                <tr class="bg-dark text-white">
+                    <th colspan="8">Risks-Inherent Risk</th>
+                </tr>
+                <tr class="bg-dark text-white">
+                    <th>Risk Category</th>
+                    <th>Category Weights</th>
+                    <th>Risk Score</th>
+                    <th>Weighted Score</th>
+                    <th class="clsDivider"></th>
+                    <th>Category Weights</th>
+                    <th>Risk Score</th>
+                    <th>Weighted Score</th>
+                </tr>
+                <tr>
+                    <td align="left">Customer Risk</td>
+                    <td>20.00</td>
+                    <td class="riskScore2">2.15</td>
+                    <td>0.14</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore2">2.15</td>
+                    <td>0.14</td>
+                </tr>
+                <tr>
+                    <td align="left">Pre-Defined</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore2">2.15</td>
+                    <td>0.14</td>
+                </tr>
+                <tr>
+                    <td align="left">Products & Services</td>
+                    <td>20.00</td>
+                    <td class="riskScore3">2.67</td>
+                    <td>0.18</td>
+                    <th class="clsDivider"></th>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td align="left">Geography</td>
+                    <td>10.00</td>
+                    <td class="riskScore2">1.88</td>
+                    <td>0.13</td>
+                    <th class="clsDivider"></th>
+                    <td>10.00</td>
+                    <td class="riskScore2">1.88</td>
+                    <td>0.13</td>
+                </tr>
+                <tr>
+                    <th colspan="3" class="">Aggregate Risk Rating</th>
+                    <th class="riskScore1">0.45</th>
+                    <th class="clsDivider"></th>
+                    <th colspan="2">Aggregate Risk Rating</th>
+                    <th class="riskScore1">0.45</th>
+                </tr>
+                <tr class="bg-dark text-white">
+                    <th colspan="8">Risks-Control Assessment</th>
+                </tr>
+                <tr class="bg-dark text-white">
+                    <th>Risk Category</th>
+                    <th>Category Weights</th>
+                    <th>Risk Score</th>
+                    <th>Weighted Score</th>
+                    <th class="clsDivider"></th>
+                    <th>Category Weights</th>
+                    <th>Risk Score</th>
+                    <th>Weighted Score</th>
+                </tr>
+               
+                <tr>
+                    <td align="left">Governance &amp; Oversight</td>
+                    <td>20.00</td>
+                    <td class="riskScore1">0.80</td>
+                    <td>0.01</td>
+                    <th class="clsDivider"></th>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td align="left">Policies &amp; Procedures</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore1">0.80</td>
+                    <td>0.01</td>
+                </tr>
+                <tr>
+                    <td align="left">Training</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td align="left">KYC (ID&amp;V-CDD-EDD)</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore1">0.80</td>
+                    <td>0.01</td>
+                </tr>
+                <tr>
+                    <td align="left">Ongoing KYC Review</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore1">0.80</td>
+                    <td>0.01</td>
+                </tr>
+                <tr>
+                    <td align="left">Transaction Monitoring</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td align="left">Independent Testing</td>
+                    <td>10.00</td>
+                    <td class="riskScore1">0.00</td>
+                    <td>0.00</td>
+                    <th class="clsDivider"></th>
+                    <td>20.00</td>
+                    <td class="riskScore1">0.80</td>
+                    <td>0.01</td>
+                </tr>
+                <tr>
+                    <th colspan="3" class="">Aggregate Risk Rating</th>
+                    <th class="riskScore1">0.01</th>
+                    <th class="clsDivider"></th>
+                    <th colspan="2">Aggregate Risk Rating</th>
+                    <th class="riskScore1">0.01</th>
+                </tr>
+                <tr class="bg-dark text-white">
+                    <th colspan="8">Residual Risk Rating</th>
+                </tr>
+                <tr>
+                    <td align="left" colspan="3">Aggregate Inherent Risk Risk Rating</td>
+                    <td class="riskScore1">0.45</td>
+                    <th class="clsDivider"></th>
+                    <td colspan="2"></td>
+                    <td class="riskScore1">0.45</td>
+                </tr>
+                <tr>
+                    <td align="left" colspan="3">Aggregate Control Assessment Risk Rating</td>
+                    <td class="riskScore1">0.01</td>
+                    <th class="clsDivider"></th>
+                    <td align="left" colspan="2"></td>
+                    <td class="riskScore1">0.01</td>
+                </tr>
+                <tr>
+                    <th colspan="3">Residual AML Risk Rating</th>
+                    <th class="riskScore1">
+                        Low
+                    </th>
+                    <th class="clsDivider"></th>
+                    <th colspan="2">Residual AML Risk Rating</th>
+                    <th class="riskScore1">
+                        Low
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/RiskCompare-Index.js" asp-append-version="true"></script>
+}
+@section extracss{
+    <style>
+        .clsDivider{
+            border: 2px solid #699da9 !important;
+            padding:0px!important;
+            background-color: #699da9 !important;
+        }
+    </style>
+}

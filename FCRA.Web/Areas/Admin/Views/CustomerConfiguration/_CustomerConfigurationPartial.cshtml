@@ -1,0 +1,38 @@
+﻿@model List<FCRA.ViewModels.Customers.CustomerConfigurationViewModel>
+@{
+    var iIndex = 0;
+    var formPermissions = ViewContext.HttpContext.GetFormPermissions();
+}
+<table class="table" id="tblcustomerConfig">
+    <thead>
+        <tr>
+            <th style="text-align:center;width:105px;">Sl. No.</th>
+            <th style="text-align:left;">Field Name</th>
+            <th style="width:10%;text-align:center;">Visible</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            iIndex += 1;
+            <tr data-fieldid="@item.FieldId">
+                <td style="text-align:right;">@iIndex</td>
+                <td>@item.FieldName</td>
+                <td style="text-align:center">
+                    <input asp-for="@item.Visible" datatype="Visible" class="form-check-input chkVisible" />
+                </td>
+            </tr>
+        }
+    </tbody>
+    @if (Model != null && Model.Count > 0 && formPermissions.Edit)
+    {
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:center">
+                    <button type="button" id="btnUpdateCustomerConfig" class="btn btn-primary rounded-10 font-weight-600 px-4 mt-1 waves-effect waves-float waves-light">Update</button>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>
+

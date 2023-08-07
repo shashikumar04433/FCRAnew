@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>36d9915b-6ec6-4c19-9d39-05fc1b2ba6b1</UserSecretsId>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\CODEOWNERS" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\dependabot.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\ISSUE_TEMPLATE\bug_report.md" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\ISSUE_TEMPLATE\config.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\ISSUE_TEMPLATE\feature_request.md" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\release-drafter.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\SUPPORT.md" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\browserstack.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\bundlewatch.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\codeql.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\css.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\docs.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\js.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\lint.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\node-sass.yml" />
+    <None Include="wwwroot\assets\bootstrap-5.0.2\.github\workflows\release-notes.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+    <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FCRA.Common\FCRA.Common.csproj" />
+    <ProjectReference Include="..\FCRA.Repository\FCRA.Repository.csproj" />
+    <ProjectReference Include="..\FCRA.ViewModels\FCRA.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ExcelSupport">
+      <HintPath>ExtraDlls\ExcelSupport.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

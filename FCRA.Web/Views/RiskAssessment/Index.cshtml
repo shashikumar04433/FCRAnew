@@ -1,0 +1,99 @@
+﻿@model List<RiskTypeViewModel>
+@{
+    ViewData["Title"] = "Assessment Parameter";
+    var colors = new[] { "", "red", "yellow", "green", "light-yellow", "cyan" };
+    int iIndex = 0;
+    bool isTreeViewType = (bool)ViewBag.IsTreeViewType;
+}
+@if (isTreeViewType)
+{
+    <div class="row">
+        @foreach (var type in Model)
+        {
+            <div class="col-12 col-lg-3 mb-4">
+                <div class="divJstree">
+                    <ul>
+                        <li class="jstree-open" data-jstree='{"icon" : "fas fa-asterisk"}'>
+                            @type.Name
+                            <ul>
+                                @if (false)
+                                {
+
+                                    @foreach (var factor in type.GeographicPresences)
+                                    {
+                                        <li data-jstree='{"icon" : "fas fa-location-arrow text-info"}'>
+                                            <a asp-area="" asp-controller="RiskAssessment" asp-action="RAssessment" asp-route-t="@type.Id.Encrypt()" asp-route-f="@factor.Id.Encrypt()">@factor.Name</a>
+                                            @* <ul>
+                            @if (factor.RiskSubFactors.Any())
+                            {
+
+                            @foreach (var subFactor in factor.RiskSubFactors)
+                            {
+                            <li data-jstree='{"icon" : "fas fa-location-arrow text-info"}'>
+                            <a asp-area="" asp-controller="RiskAssessment" asp-action="RAssessment" asp-route-t="@type.Id.Encrypt()" asp-route-f="@factor.Id.Encrypt()" asp-route-s="@subFactor.Id.Encrypt()">@subFactor.Name</a>
+                            </li>
+                            }
+
+                            }
+                            else
+                            {
+                            <li data-jstree='{"icon" : "fas fa-times text-danger"}'>No sub factor defined!</li>
+                            }
+                            </ul>*@
+                                        </li>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <li data-jstree='{"icon" : "fas fa-times text-danger"}'>No factor defined!</li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+    <a id="anchorID" href="mynewurl" class="d-none"></a>
+}
+else
+{
+    <div class="tab-content mt-3">
+        <div class="tab-pane active">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-lg-3 mb-4">
+                        <a class="text-decoration-none" asp-area="" asp-action="Assessment" asp-controller="RiskAssessment" asp-route-t="@item.Id.Encrypt()">
+                            <div class="card drop @(colors[iIndex])">
+                                <div class="card-body d-flex justify-content-md-center align-items-center">
+                                    <div>
+                                        <h4>@item.Name</h4>
+                                        <p title="@item.Description">@item.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    iIndex += 1;
+                    if (iIndex > 5)
+                        iIndex = 0;
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@if (isTreeViewType)
+{
+    @section extracss{
+    <link rel="stylesheet" type="text/css" href="~/js/jstree/jstree.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/js/jstree/ext-component-tree.css" />
+}
+    @section scripts{
+    <script src="~/js/jstree/jstree.min.js"></script>
+    <script src="~/js/jstree/ext-component-tree.js"></script>
+    <script src="~/js/RiskAssessment-Index.js" asp-append-version="true"></script>
+}
+}

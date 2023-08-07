@@ -1,0 +1,77 @@
+﻿@using FCRA;
+@using FCRA.Common;
+@model FCRA.ViewModels.AssessmentViewModel
+@{
+    var criterias = Model.RiskCriteriaMappings.Select(t => new FCRA.ViewModels.SelectIntViewModel { Id = t.RiskCriteria.Id, Name = t.RiskCriteria.Name }).DistinctBy(t => t.Id).ToList();
+    var iIndex = 0;
+    ScaleType scaleType = ScaleType.ThreePoint;
+    if (ViewBag.ScaleType != null)
+        scaleType = (ScaleType)ViewBag.ScaleType;
+}
+@if (Model.RiskCriteriaMappings.Any())
+{
+    <div class="card">
+        <div class="card-body">
+            <table class="table tblRatingScore">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Product/Service Category</th>
+                        <th class="min-w-135">Value</th>
+                        @foreach (var criteria in criterias)
+                        {
+                            <th class="min-w-135">
+                                @criteria.Name
+                            </th>
+                        }
+                        <th>Total Score</th>
+                        <th>Final Score</th>
+                        <th>Risk Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.ProductServiceMappings)
+                    {
+                        var hasRisks = Model.RiskCriteriaMappings.Any(t => t.RiskFactorId == product.RiskFactorId && t.ProductId == product.ProductId);
+                        if (hasRisks)
+                        {
+                            iIndex += 1;
+                            <tr style="vertical-align:middle" data-low="@product.ScaleRange2" data-mediummin="@product.ScaleRange3" data-mediummax="@product.ScaleRange4" data-high="@product.ScaleRange5">
+                                <td align="right">@iIndex</td>
+                                <th>@product.ProductService?.Name</th>
+                                <td>
+                                    <input asp-for="@product.Volume" type="number" class="form-control text-end productVolume" data-factorid="@product.RiskFactorId" data-subfactorid="@product.RiskSubFactorId" data-productid="@product.ProductId" data-totalscore="@product.TotalScore" data-finalscore="@product.FinalScore" data-riskrating="@product.RiskRating">
+                                </td>
+                                @foreach (var criteria in criterias)
+                                {
+                                    var risk = Model.RiskCriteriaMappings.Where(t => t.RiskFactorId == product.RiskFactorId && t.ProductId == product.ProductId && t.RiskCriteriaId == criteria.Id).FirstOrDefault();
+                                    @if (risk != null)
+                                    {
+                                        <td style="position:relative;">
+                                            <input asp-for="@risk.Score" readonly="readonly" class="form-control form-control-sm text-end ratingScore" type="number" placeholder="Response" max="1000" min="0" data-factorid="@risk.RiskFactorId" data-subfactorid="@risk.RiskSubFactorId" data-productid="@risk.ProductId" data-criteriaid="@risk.RiskCriteriaId" data-questions="@risk.QuestionIds" data-answers="@risk.Answers" />
+                                            <button type="button" title="Questionnaire" class="btn rounded-5 min-w-0 ml-1 btnQuestion"><i class="fas fa-pen-fancy text-info"></i></button>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                                <td align="center" class="tdTotalScore">@product.TotalScore</td>
+                                <td align="center" class="tdFinalScore">@product.FinalScore</td>
+                                <td align="center" class="tdRiskRating">@Utilitiy.GetRatingText(scaleType, product.RiskRating)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2" class="text-end">Total Value</th>
+                        <th class="thTotalVolume">@Model.ProductServiceMappings.Sum(t=>t.Volume)</th>
+                        <th colspan="@(criterias.Count +3)"></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+}

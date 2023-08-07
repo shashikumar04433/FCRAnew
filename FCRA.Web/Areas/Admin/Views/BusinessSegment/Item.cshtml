@@ -1,0 +1,138 @@
+﻿@model BusinessSegmentViewModel
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = (Model?.Id == 0 ? $"Add New {_masterType}" : $"{permissions.EditViewText} {_masterType}");
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 class="col">
+                @ViewData["Title"] Master
+            </h4>
+            <div class="col">
+                <a asp-area="Admin" asp-controller="@controller" asp-action="Index" class="text-decoration-none float-end"><i class="fas fa-arrow-alt-circle-left"></i>&nbsp;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="@controller" asp-action="Item" method="post">
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ScaleType" type="hidden" />
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="StageId"></label>
+                    <select asp-for="StageId" asp-items="ViewBag.StageId" class="form-select"></select>
+                    <span asp-validation-for="StageId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="RiskTypeId"></label>
+                    <select asp-for="RiskTypeId" asp-items="@ViewBag.RiskTypeId" class="form-select"></select>
+                    <span asp-validation-for="RiskTypeId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="GeographicPresenceId"></label>
+                    <select asp-for="GeographicPresenceId" asp-items="@ViewBag.GeographicPresenceId" class="form-select"></select>
+                    <span asp-validation-for="GeographicPresenceId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="CustomerSegmentId"></label>
+                    <select asp-for="CustomerSegmentId" asp-items="@ViewBag.CustomerSegmentId" class="form-select"></select>
+                    <span asp-validation-for="CustomerSegmentId" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" placeholder="Enter Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" placeholder="Enter Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="ScaleRange2"></label>
+                    <input asp-for="ScaleRange2" placeholder="Enter Risk Range" class="number" />
+                    <span asp-validation-for="ScaleRange2" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="ScaleRange3"></label>
+                    <input asp-for="ScaleRange3" placeholder="Enter Risk Range" class="number" />
+                    <span asp-validation-for="ScaleRange3" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 d-none scaleType scaleType4 scaleType5">
+                    <label asp-for="ScaleRange4"></label>
+                    <input asp-for="ScaleRange4" placeholder="Enter Risk Range" class="number" />
+                    <span asp-validation-for="ScaleRange4" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4 d-none scaleType scaleType5">
+                    <label asp-for="ScaleRange5"></label>
+                    <input asp-for="ScaleRange5" placeholder="Enter Risk Range" class="number" />
+                    <span asp-validation-for="ScaleRange5" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label asp-for="Sequence"></label>
+                    <input asp-for="Sequence" placeholder="Enter Display Order" />
+                    <span asp-validation-for="Sequence" class="text-danger"></span>
+                </div>
+                @if (Model?.Id > 0)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input asp-for="IsActive" class="form-check-input">
+                            <label asp-for="IsActive" class="form-check-label nomandatory"></label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                @if (permissions.CanShowAddEditButton(Model!.Id))
+                {
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary ps-4 pe-4"><i class="fas fa-save me-2"></i> @(Model!.Id == 0 ? "Save" : "Update")</button>
+                        @if (Model!.Id != 0)
+                        {
+                            <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail">Audit Trail</button>
+                        }
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblDataAuditTrail">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Field Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<input hidden="hidden" id="hdTitle" value="@Model.GetType().Name" />
+<input hidden="hidden" id="hdId" value="@Model!.Id" />
+@section scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="@Url.Action("AdminBusinessSegment","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/BusinessSegment-Item.js" asp-append-version="true"></script>
+}

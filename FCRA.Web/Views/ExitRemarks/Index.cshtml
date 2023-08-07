@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ExitRemarksViewModel>
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var iIndex = 0;
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+}
+<h2 class="chart-area-title">
+    @ViewData["Title"] 
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                <label class="form-label">Select Page</label>
+                <select id="dataAuditTrailId" class="form-select">
+                    <option value="">--Select--</option>
+                    <option value="CustomerViewModel">Customer Master</option>
+                    <option value="StageViewModel">Stage Master</option>
+                    <option value="RiskTypeViewModel">Risk Type Master</option>
+                    <option value="GeographicPresenceViewModel">Geographic Presence Master</option>
+                    <option value="CustomerSegmentViewModel">Business Segment Master</option>
+                    <option value="BusinessSegmentViewModel">Sub Unit Master</option>
+                    <option value="PreDefinedRiskParameterViewModel">Pre Defined Risk Parameter Master</option>
+                    <option value="ProductServiceViewModel">Product Service Master</option>
+                    <option value="QuestionsViewModel">Question Master</option>
+                    <option value="RiskCriteriaViewModel">Risk Criteria</option>
+                    <option value="RiskFactorViewModel">Risk Factor Master</option>
+                    <option value="RiskSubFactorViewModel">Risk Sub Factor Master</option>
+                    <option value="RoleMasterViewModel">Roles Master</option>
+                    <option value="UserViewModel">Users Master</option>
+                    <option value="RiskFactorResponse">Risk Factor Response</option>
+                    <option value="RiskSubFactorResponse">Risk Sub Factor Response</option>
+                    <option value="RiskScoreProductVolumRatingResponse">Risk Score Product Volume Rating Response</option>
+                    <option value="RiskScoreResponse">Risk Score Response</option>
+                    <option value="RiskSubFactorVolumeResponse">Risk Sub Factor Volume Response</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                <button type="button" id="btnSearchAuditTrail" class="btn btn-primary rounded-10 font-weight-600 waves-effect waves-float waves-light" style="margin-top:25px" data-toggle="tooltip" title="Search Audit Trail"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="example" data-order='[[1, "desc"]]' class="table table-sm table-hover table-striped mb-0 custom-table datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th data-orderable="false">Sl. No.</th>
+                        <th>Action Remarks</th>
+                        <th>Last Action By</th>
+                        <th>Last Action On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            iIndex += 1;
+                            <tr>
+                                <td>@iIndex</td>
+                                <td data-order="@item.Id">@item.Remarks</td>
+                                <td>@item.LastActionBy</td>
+                                <td data-order="@item.LastActionOnOrder">@item.LastActionOnStr</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Field Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="~/js/exitremarks-index.js"></script>
+}

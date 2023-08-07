@@ -1,0 +1,66 @@
+﻿.col-20p {
+    width: 20% !important;
+}
+
+.box {
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: rgb(255 255 255 / 50%) !important;
+    backdrop-filter: blur(2px);
+    border-radius: 15px;
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .box .btn-outline-primary {
+        color: #0066a5;
+        border-color: #0066a5;
+    }
+
+        .box .btn-outline-primary:hover,
+        .box .btn-outline-primary.active {
+            color: #fff;
+            background-color: #0066a5;
+            border-color: #0066a5;
+        }
+
+    .box .btn:hover,
+    .box .btn:focus {
+        box-shadow: none !important;
+    }
+
+    .box .btn.disabled {
+        color: #000 !important;
+        border-color: #000 !important;
+        opacity: .10 !important;
+        pointer-events: unset !important;
+    }
+
+.progress {
+    height: 4px !important;
+}
+
+.divCategoryGroup .card .card-header {
+    background-color: #0066a5 !important;
+    color: #fff !important;
+}
+
+.divCategoryGroup .card .card-body .btn {
+    font-size: 12px !important;
+}
+
+
+#divRiskResponseContainer .tab-content .tab-pane {
+    overflow-x: auto !important;
+}
+
+.select2-container.select2-container--open {
+    z-index: 9999;
+}
+
+.btnPillsExcelContainer .btn {
+    font-size: 11px;
+}

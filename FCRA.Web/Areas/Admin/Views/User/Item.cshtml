@@ -1,0 +1,124 @@
+﻿@model UserViewModel
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var permissions = ViewContext.HttpContext.GetFormPermissions();
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = (Model!.Id == 0 ? $"Add New {_masterType}" : $"Edit {_masterType}");
+    var userType = 0;
+    if (ViewBag.UserType != null)
+        userType = (int)ViewBag.UserType;
+}
+<h2 class="chart-area-title">
+    <a asp-area="Admin" asp-controller="@controller" asp-action="Index">@(_masterType) Master</a> >> @ViewData["Title"]
+</h2>
+<div class="card">
+    <div class="card-body">
+        <form asp-area="Admin" asp-controller="@controller" asp-action="Item" method="post" id="frmUser">
+            <input asp-for="Id" type="hidden" />
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" aria-required="true" placeholder="Enter Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" aria-required="true" placeholder="Enter Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" aria-required="true" placeholder="Enter Description" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                    <label asp-for="RoleId"></label>
+                    <select asp-for="RoleId" aria-required="true" class="select2 form-select active">
+                        <option value="">--Select--</option>
+                        @foreach (var item in ViewBag.RoleId as List<SelectViewModel>)
+                        {
+                            <option value="@item.Id" data-utype="@item.ParentId">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RoleId" class="text-danger"></span>
+                </div>
+                @if (userType == 1)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <label asp-for="CustomerId"></label>
+                        <select asp-for="CustomerId" asp-items="ViewBag.Customers" aria-required="true" class="select2 form-select active"></select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="CustomerId" type="hidden" />
+                }
+                @if (Model?.Id > 0)
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input asp-for="IsActive" class="form-check-input">
+                            <label asp-for="IsActive" class="form-check-label nomandatory"></label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" aria-required="true" placeholder="Enter Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                }
+                @if (permissions.CanShowAddEditButton(Model!.Id))
+                {
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-primary ps-4 pe-4" id="btnSave"><i class="fas fa-save me-2"></i> @(Model!.Id == 0 ? "Save" : "Update")</button>
+                        @if (Model!.Id != 0)
+                        {
+                            <button type="button" class="btn btn-primary ps-4 pe-4" id="btnAuditTrail">Audit Trail</button>
+                        }
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="divAuditTrailModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Audit Trail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover table-striped mb-0 custom-table datatable" id="tblSelectedCountires">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Field Name</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Modified By</th>
+                            <th>Modified On</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<input hidden="hidden" id="hdTitle" value="@Model.GetType().Name" />
+<input hidden="hidden" id="hdId" value="@Model!.Id" />
+
+@section scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script src="@Url.Action("AdminUser","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/UserMaster-Item.js" asp-append-version="true"></script>
+}

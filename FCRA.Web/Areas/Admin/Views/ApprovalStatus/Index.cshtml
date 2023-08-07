@@ -1,0 +1,38 @@
+﻿@using System.Data;
+@model DataSet
+@{
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var _masterType = ViewData["Title"];
+    ViewData["Title"] = "Approval Status";
+}
+
+<h2 class="chart-area-title">
+    @ViewData["Title"]
+</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                <label> Status </label>
+                <select class="form-select" id="ddlApprovalStatus">
+                    <option value="SR">Submitted for Review</option>
+                    <option value="R">Reviewed</option>
+                    <option value="S">Submitted for Approval</option>
+                    <option value="A">Approved</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <button type="button" class="btn btn-primary mt-4" id="btnStatusSearch"><i class="fas fa-save me-2"></i>Search</button>
+            </div>
+        </div>
+        <div class="col-12 mt-1" id="divApprovalStatusContainer"></div>
+        <div class="table-responsive">
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="@Url.Action("AdminRolePermissions","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Admin/Masters/approvalstatus-index.js"></script>
+                                }

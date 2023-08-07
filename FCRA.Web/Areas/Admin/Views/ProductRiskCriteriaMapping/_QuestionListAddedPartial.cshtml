@@ -1,0 +1,17 @@
+﻿@model List<QuestionsViewModel>
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr data-id="@item.Id">
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td><button type="button" class="btn btn-outline-danger rounded-5 min-w-0 btnRemoveQuestion" title="Remove Questions"><i class="fas fa-trash text-danger"></i></button></td>
+        </tr>
+    }
+}
+else{
+    <tr>
+        <td colspan="3">No quesion selected!</td>
+    </tr>
+}

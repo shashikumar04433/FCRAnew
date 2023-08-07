@@ -1,0 +1,75 @@
+.login-wrapper.bg-wrapper{
+    min-height: calc(100vh);
+    background-image: url(../images/risk-mgmt-banner-bg.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+}
+.login-wrapper .brand-logo{
+    display: inline-block;
+    cursor: pointer;
+}
+.login-wrapper .brand-logo img{
+    width: 150px;
+}
+.login-wrapper .risk-image{
+    max-width: 250px;
+}
+.login-wrapper .forgotpassword-image{
+    max-width: 100%;
+}
+.login-wrapper .login-wrap{
+    display: flex;
+    align-items: center;
+}
+.aml-text-wrapper{
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+}
+.aml-text-wrapper .img-aml{
+    padding-right: 15px;
+}
+.aml-text-wrapper .text-aml{
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 40px;
+    color: #0270b0;
+}
+.aml-text-wrapper .img-aml img{
+    filter: invert(30%) sepia(84%) saturate(1088%) hue-rotate(175deg) brightness(93%) contrast(101%);
+    transform: rotate(180deg);
+    max-width: 84px;
+}
+.login-wrapper .login-wrap h2{
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 32px;
+    color: #0066a5;
+}
+.login-wrapper .login-wrap .sub-title{
+    color: #6c6c6c;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 16px;
+}
+.input-group .fas{
+    color: #0066a5;
+    margin-right: 5px;
+}
+.input-group-text{
+    font-size: 14px;
+    font-weight: 700;
+    background-color: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-radius: 20px;
+    color: #6c6c6c;
+    letter-spacing: 1px;
+    min-width: 108px;
+}
+.input-group-text + .form-control{
+    background-color: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-radius: 20px;
+}

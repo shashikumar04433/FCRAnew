@@ -1,0 +1,25 @@
+﻿/*.multiselect-native-select .btn {
+    background-color: #f3f3f3 !important;
+    border-radius: 10px !important;
+    border: 1px solid #dadada !important;
+}
+
+    .multiselect-native-select .btn:hover {
+        box-shadow: none;
+    }
+
+.multiselect-container > li > a > label {
+    padding: 5px 10px !important;
+}*/
+
+.dropdown-menu {
+    min-width: 250px !important;
+}
+.dropdown.bootstrap-select {
+    width: 100% !important;
+}
+    .dropdown.bootstrap-select .btn.dropdown-toggle {
+        background-color: #f3f3f3 !important;
+        border-radius: 10px !important;
+        border: 1px solid #dadada !important;
+    }

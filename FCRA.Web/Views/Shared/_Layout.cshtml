@@ -1,0 +1,206 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<FCRA.ViewModels.StorageSettings> myOptions
+@{
+    FCRA.ViewModels.StorageSettings _storageSettings = myOptions.Value;
+    string? logo = User?.Claims?.Where(t => t.Type == "logourl").FirstOrDefault()?.Value;
+    if (!string.IsNullOrWhiteSpace(logo))
+        logo = $"{_storageSettings.StorageUrl}/{_storageSettings.ContainerName}/{logo}";
+
+    string? company = User?.Claims?.Where(t => t.Type == "brandingname").FirstOrDefault()?.Value;
+    if (string.IsNullOrWhiteSpace(company))
+        company = "FCRA";
+}
+<!DOCTYPE html>
+<html lang="en" class="loading white-layout" data-textdirection="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @company</title>
+    <meta name="description" content="@company">
+    <!-- BEGIN: Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- END: Icon -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="stylesheet" href="~/assets/bootstrap-5.0.2/dist/css/bootstrap.min.css" />
+    <!--DAte Range-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!--Data table-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" /><!--bootstra multiselect-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="~/css/forms/select/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/bootstrap-5-toster/bootstrap-toaster.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/forms/wizard/bs-stepper.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/plugins/forms/form-wizard.css" />
+    <link rel="stylesheet" href="~/assets/style/common.css" />
+    <link rel="stylesheet" href="~/assets/style/home.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FCRA.Web.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("extracss", required: false)
+</head>
+<body class="bg-wrapper">
+    <div class="page-loader">
+        <div class="spinner"></div>
+        <div class="txt">Please<br>Wait..</div>
+    </div>
+    <!--header start from here-->
+    <header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-lg header">
+                        <div class="container-fluid">
+                           @* <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
+                                @if (string.IsNullOrEmpty(logo))
+                                {
+                                    //<img src="~/assets/images/adcb_logo.png" alt="@company" class="companyLogo" />
+                                    <img src="~/assets/images/cbd_logo.png" alt="@company" class="companyLogo" style="height:40px; width:auto;" asp-append-version="true" />
+                                }
+                                else
+                                {
+                                    <img src="@logo" alt="@company" class="companyLogo" />
+                                }
+                            </a>*@
+                            @{
+                                var customerName = User?.Claims?.Where(t => t.Type == "userCustomerName").FirstOrDefault()?.Value;
+                                var userTypeC = User?.Claims?.Where(t => t.Type == "userType").FirstOrDefault()?.Value;
+                                var isSuperAdmin = Int32.TryParse(userTypeC, out int userType) && userType == 1;
+                            }
+                            @if (!string.IsNullOrWhiteSpace(customerName))
+                            {
+                                <h5 class="mb-0">@customerName</h5>
+                            }
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item dropdown user-info">
+                                    Welcome :
+                                    <a class="nav-link dropdown-toggle d-inline-block user-info-name" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="d-inline-block">
+                                            <span id="spLoggedUser"> @User?.Claims?.Where(t=>t.Type=="userName").FirstOrDefault()?.Value</span>
+                                            <div class="user-designation">@User?.Claims?.Where(t=>t.Type=="role").FirstOrDefault()?.Value</div>
+                                        </div>
+
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end user-info-option" aria-labelledby="navbarScrollingDropdown">
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-1"></i> Profile</a></li>
+                                        @if (isSuperAdmin)
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("CustomerSelection","Auth",new{area=""})"><i class="fas fa-cog me-1"></i>Change Customer</a></li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li> <a class="dropdown-item aExitRemarks" href="#"><i class="fas fa-comment-dots me-1"></i> Exit Remarks</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item aLogout" href="#"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--header start end here-->
+    <section class="container-fluid">
+        <!--Side Navigation start from here-->
+        <aside class="side-navigation">
+            <div class="main-menu">
+                <partial name="_MenuPartial" />
+            </div>
+        </aside>
+        <!--Side Navigation endd from here-->
+        <!--Main display area-->
+        <section class="main-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </section>
+    </section>
+
+    <div class="appMessage">
+        @{
+            var appResult = TempData.Get<AppResultViewModel>("AppResult");
+        }
+        @if (appResult != null)
+        {
+            if (appResult.Status)
+            {
+                <div class="toast toast-basic position-fixed success" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000" style="top: 1rem; right: 1rem">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Success</strong>
+                        <button type="button" class="ml-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">@appResult.Message</div>
+                </div>
+            }
+            else
+            {
+                <div class="toast toast-basic position-fixed error" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000" style="top: 1rem; right: 1rem">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Alert</strong>
+                        <button type="button" class="ml-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body text-danger bg-white">@appResult.Message</div>
+                </div>
+            }
+        }
+    </div>
+    <footer>
+        <div class="footer">
+            &copy; @DateTime.Now.Year - Protiviti @*- <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
+        </div>
+        <form asp-area="" asp-controller="Auth" asp-action="LogOff" id="frmLogout"></form>
+    </footer>
+    <div class="modal fade" id="divAddExitRemarksModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Exit Remarks</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <textarea rows="10" class="form-control" id="txtExitRemarks"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnExitRemarksSaveModal" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="~/js/default.init.js"></script>
+    <script type="text/javascript" src="~/assets/jquery-3.6.1.js"></script>
+    <script type="text/javascript" src="~/assets/popper.min.js"></script>
+    <script type="text/javascript" src="~/assets/bootstrap-5.0.2/dist/js/bootstrap.min.js"></script>
+    <!--date range-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!--datatable-->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <!--bootstra multiselect-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+
+
+    <script src="~/assets/bootstrap-5-toster/bootstrap-toaster.js"></script>
+    <script src="~/js/forms/wizard/bs-stepper.min.js"></script>
+    <script src="~/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="~/js/forms/select/select2.full.min.js"></script>
+    <script src="~/js/scripts/forms/form-wizard.js"></script>
+    <script src="~/js/scripts/forms/form-select2.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="@Url.Action("Global","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/Global.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

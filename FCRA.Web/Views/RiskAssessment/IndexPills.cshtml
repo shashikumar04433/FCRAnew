@@ -1,0 +1,88 @@
+﻿@model IEnumerable<StageViewModel>
+@{
+    ViewData["Title"] = "Assessment Parameter";
+    ViewBag.HasProgress = true;
+}
+<input type="hidden" id="ScaleType" value="@ViewBag.ScaleType" />
+<partial name="~/Views/CategoryPills/_CategoryPillsPartial.cshtml" model="Model" />
+
+<div class="modal fade" id="divSaveResponseRemarksModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remarks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <textarea rows="10" class="form-control" id="txtSaveResponseRemarks"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveResponseModal" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="divSaveApproveRemarksModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remarks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <textarea rows="10" class="form-control" id="txtSaveApproveResponseRemarks"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveApproveResponseModal" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <input type="hidden" id="hdCustomerId" value="@ViewBag.customerId" />
+</div>
+
+@section extracss{
+    <link href="~/css/CategoryPills.css" rel="stylesheet" asp-append-version="true" />
+    <style>
+        .ratingScore {
+            display: inline-block;
+            padding-right: 20px;
+        }
+
+        .btnQuestion {
+            position: absolute !important;
+            right: 5px !important;
+        }
+
+        .tblRatingScore th.min-w-135 {
+            min-width: 135px;
+        }
+
+        .tblRatingScore th.min-w-80 {
+            min-width: 80px !important;
+        }
+    </style>
+}
+@section Scripts{
+    <script src="@Url.Action("AdminMastersCustomer","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("RiskAssessmentAssessmentIndexPills","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("CategoryPills","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="@Url.Action("RiskAssessmentAssessment","LinkScript",new {area=""})" asp-append-version="true"></script>
+    <script src="~/js/CategoryPills.js" asp-append-version="true"></script>
+    <script src="~/js/RiskAssessment-IndexPills.js" asp-append-version="true"></script>
+    <script src="~/js/RiskAssessment-AssessmentPills.js" asp-append-version="true"></script>
+}
